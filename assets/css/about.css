@@ -1,0 +1,285 @@
+/* ================================
+   ZALAMS LUXURY — ABOUT PAGE
+   about.css
+================================ */
+
+/* --- Hero --- */
+.about-hero {
+  position: relative;
+  height: 55vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-top: 61px;
+}
+
+.about-hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.4;
+  z-index: 0;
+}
+
+.about-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.3) 0%,
+    rgba(0,0,0,0.7) 100%
+  );
+  z-index: 1;
+}
+
+.about-hero__content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.about-hero__label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 12px;
+}
+
+.about-hero__title {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 8vw, 7rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  line-height: 1;
+}
+
+/* --- Mission --- */
+.about-mission {
+  padding: 100px 0;
+  background-color: var(--color-bg);
+}
+
+.about-mission__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.about-mission__text {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.about-mission__body {
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.7);
+}
+
+.about-mission__image {
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+}
+
+.about-mission__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.about-mission__image:hover img {
+  transform: scale(1.04);
+}
+
+/* --- Stats --- */
+.about-stats {
+  padding: 80px 0;
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.about-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  text-align: center;
+}
+
+.about-stats__item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.about-stats__number {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  letter-spacing: 0.05em;
+  color: var(--color-gold);
+  line-height: 1;
+}
+
+.about-stats__label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-grey);
+}
+
+/* --- Values --- */
+.about-values {
+  padding: 100px 0;
+  background-color: var(--color-bg);
+}
+
+.about-values__header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.about-values__header .section-subtitle {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.about-values__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.about-values__card {
+  padding: 40px 32px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  text-align: center;
+  transition: border-color 0.3s ease;
+}
+
+.about-values__card:hover {
+  border-color: var(--color-gold);
+}
+
+.about-values__icon {
+  display: block;
+  font-size: 1.5rem;
+  color: var(--color-gold);
+  margin-bottom: 20px;
+}
+
+.about-values__title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  margin-bottom: 16px;
+}
+
+.about-values__text {
+  font-size: 0.85rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--color-grey);
+}
+
+/* --- CTA --- */
+.about-cta {
+  position: relative;
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.about-cta__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.about-cta__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 1;
+}
+
+.about-cta__content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.about-cta__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  line-height: 1;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .about-stats__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .about-mission__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .about-values__grid {
+    grid-template-columns: 1fr;
+  }
+  .about-stats__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --- About Image Slider --- */
+.about-slider {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+}
+
+.about-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.about-slide.active {
+  opacity: 1;
+}

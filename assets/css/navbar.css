@@ -1,0 +1,261 @@
+/* ================================
+   ZALAMS LUXURY — NAVBAR STYLES
+   navbar.css
+================================ */
+
+/* --- Main Navbar Wrapper --- */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 20px 0;
+  transition: background-color var(--transition), padding var(--transition);
+}
+
+/* --- Scrolled State --- */
+.navbar.scrolled {
+  background-color: rgba(10, 10, 10, 0.97);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* --- Navbar Inner Layout --- */
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* --- Logo --- */
+.navbar__logo {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  letter-spacing: 0.15em;
+  color: var(--color-white);
+  text-transform: uppercase;
+  z-index: 1001;
+}
+
+.navbar__logo span {
+  color: var(--color-gold);
+}
+
+/* --- Nav Links (Desktop) --- */
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.navbar__links > li {
+  position: relative;
+}
+
+.navbar__links > li > a {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  transition: color var(--transition);
+  padding-bottom: 4px;
+}
+
+.navbar__links > li > a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--color-gold);
+  transition: width var(--transition);
+}
+
+.navbar__links > li > a:hover {
+  color: var(--color-gold);
+}
+
+.navbar__links > li > a:hover::after {
+  width: 100%;
+}
+
+/* --- Dropdown Menu --- */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 16px);
+  left: 50%;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(-8px);
+  transition: all var(--transition);
+  z-index: 999;
+}
+
+.navbar__links > li:hover .dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* --- Dropdown: Category Headers --- */
+.dropdown__group {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dropdown__group:last-child {
+  border-bottom: none;
+}
+
+.dropdown__heading {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 10px;
+}
+
+.dropdown__group a {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--color-grey);
+  padding: 5px 0;
+  transition: color var(--transition), padding var(--transition);
+}
+
+.dropdown__group a:hover {
+  color: var(--color-white);
+  padding-left: 6px;
+}
+
+/* --- Navbar Right Icons --- */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navbar__actions a {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  transition: color var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.navbar__actions a:hover {
+  color: var(--color-gold);
+}
+
+/* --- Cart Count Badge --- */
+.cart-count {
+  background-color: var(--color-gold);
+  color: #000;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Hamburger (Mobile) --- */
+.navbar__hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  z-index: 1001;
+  padding: 4px;
+}
+
+.navbar__hamburger span {
+  display: block;
+  width: 24px;
+  height: 1.5px;
+  background-color: var(--color-white);
+  transition: all var(--transition);
+}
+
+/* --- Hamburger → X animation --- */
+.navbar__hamburger.open span:nth-child(1) {
+  transform: translateY(6.5px) rotate(45deg);
+}
+
+.navbar__hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar__hamburger.open span:nth-child(3) {
+  transform: translateY(-6.5px) rotate(-45deg);
+}
+
+/* --- Mobile Menu --- */
+.navbar__mobile {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--color-bg);
+  padding: 100px 32px 40px;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+  z-index: 999;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.4s ease;
+}
+
+.navbar__mobile.open {
+  display: flex;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.navbar__mobile a {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-border);
+  transition: color var(--transition);
+}
+
+.navbar__mobile a:hover {
+  color: var(--color-gold);
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .navbar__links {
+    display: none;
+  }
+
+  .navbar__hamburger {
+    display: flex;
+  }
+
+  .navbar__actions .search-link,
+  .navbar__actions .account-link {
+    display: none;
+  }
+}

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ — Zalams Luxury</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/navbar.css" />
+  <link rel="stylesheet" href="assets/css/footer.css" />
+  <link rel="stylesheet" href="assets/css/faq.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <div class="navbar__inner">
+        <a href="index.html" class="navbar__logo">ZALAM<span>S</span></a>
+        <ul class="navbar__links">
+          <li><a href="index.html">Home</a></li>
+          <li>
+            <a href="shop.html">Shop</a>
+            <div class="dropdown">
+              <div class="dropdown__group">
+                <p class="dropdown__heading">Men</p>
+                <a href="shop.html?category=men-tshirts">T-Shirts</a>
+                <a href="shop.html?category=men-outerwear">Outer Wear</a>
+                <a href="shop.html?category=men-shirts">Shirts</a>
+                <a href="shop.html?category=men-pants">Pants</a>
+                <a href="shop.html?category=men-denim">Denim</a>
+              </div>
+              <div class="dropdown__group">
+                <p class="dropdown__heading">Women</p>
+                <a href="shop.html?category=women-tops">Tops</a>
+                <a href="shop.html?category=women-gowns">Gowns</a>
+                <a href="shop.html?category=women-skirts">Skirts</a>
+              </div>
+              <div class="dropdown__group">
+                <p class="dropdown__heading">Accessories</p>
+                <a href="shop.html?category=bags">Bags</a>
+                <a href="shop.html?category=hats">Hats</a>
+                <a href="shop.html?category=belts">Belts</a>
+              </div>
+            </div>
+          </li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="navbar__actions">
+          <a href="#" class="search-link">Search</a>
+          <a href="#" class="account-link">Account</a>
+          <a href="cart.html">Cart <span class="cart-count" id="cart-count">0</span></a>
+        </div>
+        <div class="navbar__hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="navbar__mobile" id="mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="about.html">About</a>
+    <a href="faq.html">FAQ</a>
+    <a href="contact.html">Contact</a>
+    <a href="cart.html">Cart</a>
+  </div>
+
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <img
+      class="page-hero__bg"
+      src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1800&q=80"
+      alt="FAQ Zalams"
+    />
+    <div class="page-hero__content">
+      <span class="page-hero__label">Help Center</span>
+      <h1 class="page-hero__title">FAQ</h1>
+    </div>
+  </section>
+
+
+  <!-- FAQ SECTION -->
+  <section class="faq-section">
+    <div class="container">
+      <div class="faq-layout">
+
+        <!-- Category Tabs -->
+        <div class="faq-tabs">
+          <button class="faq-tab active" data-category="all">All</button>
+          <button class="faq-tab" data-category="orders">Orders</button>
+          <button class="faq-tab" data-category="shipping">Shipping</button>
+          <button class="faq-tab" data-category="returns">Returns</button>
+          <button class="faq-tab" data-category="products">Products</button>
+          <button class="faq-tab" data-category="payments">Payments</button>
+        </div>
+
+        <!-- FAQ List -->
+        <div class="faq-list" id="faq-list">
+
+          <!-- Orders -->
+          <div class="faq-item" data-category="orders">
+            <button class="faq-question">
+              How do I track my order?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Once your order is shipped, you'll receive a confirmation email with a tracking number. You can use this to track your package on our courier's website. Tracking usually becomes active within 24 hours of shipment.</p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="orders">
+            <button class="faq-question">
+              Can I modify or cancel my order?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Orders can be modified or cancelled within 2 hours of placement. After that, the order enters processing and cannot be changed. Please contact us immediately at hello@zalams.com if you need to make changes.</p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="orders">
+            <button class="faq-question">
+              How long does it take to process my order?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Orders are processed within 1–2 business days. You will receive an email confirmation once your order has been processed and shipped.</p>
+            </div>
+          </div>
+
+          <!-- Shipping -->
+          <div class="faq-item" data-category="shipping">
+            <button class="faq-question">
+              How much does delivery cost?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Standard delivery costs ₦5,000. Orders over ₦50,000 qualify for free delivery. Express delivery (1–2 business days) costs ₦10,000 and is available in Lagos and Abuja.</p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="shipping">
+            <button class="faq-question">
+              Do you deliver nationwide?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Yes! We deliver to all states across Nigeria. Standard delivery takes 3–5 business days within Lagos and 5–7 business days for other states.</p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="shipping">
+            <button class="faq-question">
+              Do you offer international shipping?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>International shipping is currently not available but we are working on it. Sign up for our newsletter to be notified when we launch international delivery.</p>
+            </div>
+          </div>
+
+          <!-- Returns -->
+          <div class="faq-item" data-category="returns">
+            <button class="faq-question">
+              What is your return policy?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>We accept returns within 7 days of delivery. Items must be unworn, unwashed and in their original packaging with all tags attached. Sale items are non-refundable.</p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="returns">
+            <button class="faq-question">
+              How do I initiate a return?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Email us at hello@zalams.com with your order number and reason for return. We'll send you a return label within 24 hours. Refunds are processed within 5–7 business days of receiving the returned item.</p>
+            </div>
+          </div>
+
+          <!-- Products -->
+          <div class="faq-item" data-category="products">
+            <button class="faq-question">
+              How do I find my size?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Each product page has a size guide with detailed measurements. We recommend measuring yourself and comparing with our size chart. If you're between sizes, we suggest sizing up for a more comfortable fit.</p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="products">
+            <button class="faq-question">
+              How do I care for my Zalams pieces?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Care instructions are on the label of each garment. Generally, we recommend cold machine wash or hand wash, avoiding bleach, and air drying to maintain the quality and longevity of your pieces.</p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="products">
+            <button class="faq-question">
+              Are your products restocked?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Some of our pieces are limited edition and may not be restocked. Popular styles are restocked periodically. Subscribe to our newsletter to get notified when your favourite pieces are back in stock.</p>
+            </div>
+          </div>
+
+          <!-- Payments -->
+          <div class="faq-item" data-category="payments">
+            <button class="faq-question">
+              What payment methods do you accept?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>We accept all major debit and credit cards (Visa, Mastercard, Verve), bank transfers and payments via Paystack and Stripe. All transactions are secured with SSL encryption.</p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="payments">
+            <button class="faq-question">
+              Is my payment information secure?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Absolutely. We use industry-standard SSL encryption and never store your card details on our servers. All payments are processed through secured payment gateways.</p>
+            </div>
+          </div>
+
+          <div class="faq-item" data-category="payments">
+            <button class="faq-question">
+              Can I pay on delivery?
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Pay on delivery is available for orders within Lagos only. An additional fee of ₦2,000 applies. Select "Pay on Delivery" at checkout to use this option.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Still have questions -->
+      <div class="faq-cta">
+        <h3 class="faq-cta__title">Still Have Questions?</h3>
+        <p class="faq-cta__text">Our team is ready to help you with anything you need.</p>
+        <a href="contact.html" class="btn-gold">Contact Us</a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a href="index.html" class="footer__brand-logo">ZALAM<span>S</span></a>
+          <p class="footer__brand-text">Premium clothing and accessories for those who dare to stand out.</p>
+          <div class="footer__socials">
+            <a href="#" class="footer__social-link">IG</a>
+            <a href="#" class="footer__social-link">TW</a>
+            <a href="#" class="footer__social-link">TK</a>
+            <a href="#" class="footer__social-link">FB</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer__col-title">Quick Links</p>
+          <div class="footer__links">
+            <a href="index.html">Home</a>
+            <a href="shop.html">Shop</a>
+            <a href="about.html">About Us</a>
+            <a href="faq.html">FAQ</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer__col-title">Shop</p>
+          <div class="footer__links">
+            <a href="shop.html?category=men-tshirts">Men</a>
+            <a href="shop.html?category=women-tops">Women</a>
+            <a href="shop.html?category=bags">Accessories</a>
+            <a href="shop.html">New In</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer__col-title">Contact</p>
+          <div class="footer__contact-item">
+            <span class="footer__contact-label">Email</span>
+            <span class="footer__contact-value">hello@zalams.com</span>
+          </div>
+          <div class="footer__contact-item">
+            <span class="footer__contact-label">Phone</span>
+            <span class="footer__contact-value">+234 000 000 0000</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copyright">© 2026 <span>Zalams Luxury</span>. All Rights Reserved.</p>
+        <div class="footer__bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Returns</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/shop.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script>
+    // FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', () => {
+        const item = question.parentElement;
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    // FAQ Category Filter
+    const faqTabs = document.querySelectorAll('.faq-tab');
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    faqTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        faqTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const category = tab.dataset.category;
+        faqItems.forEach(item => {
+          if (category === 'all' || item.dataset.category === category) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

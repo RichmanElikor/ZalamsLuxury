@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Zalams Luxury</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/navbar.css" />
+  <link rel="stylesheet" href="assets/css/footer.css" />
+  <link rel="stylesheet" href="assets/css/contact.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <div class="navbar__inner">
+        <a href="index.html" class="navbar__logo">ZALAM<span>S</span></a>
+        <ul class="navbar__links">
+          <li><a href="index.html">Home</a></li>
+          <li>
+            <a href="shop.html">Shop</a>
+            <div class="dropdown">
+              <div class="dropdown__group">
+                <p class="dropdown__heading">Men</p>
+                <a href="shop.html?category=men-tshirts">T-Shirts</a>
+                <a href="shop.html?category=men-outerwear">Outer Wear</a>
+                <a href="shop.html?category=men-shirts">Shirts</a>
+                <a href="shop.html?category=men-pants">Pants</a>
+                <a href="shop.html?category=men-denim">Denim</a>
+              </div>
+              <div class="dropdown__group">
+                <p class="dropdown__heading">Women</p>
+                <a href="shop.html?category=women-tops">Tops</a>
+                <a href="shop.html?category=women-gowns">Gowns</a>
+                <a href="shop.html?category=women-skirts">Skirts</a>
+              </div>
+              <div class="dropdown__group">
+                <p class="dropdown__heading">Accessories</p>
+                <a href="shop.html?category=bags">Bags</a>
+                <a href="shop.html?category=hats">Hats</a>
+                <a href="shop.html?category=belts">Belts</a>
+              </div>
+            </div>
+          </li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="navbar__actions">
+          <a href="#" class="search-link">Search</a>
+          <a href="#" class="account-link">Account</a>
+          <a href="cart.html">Cart <span class="cart-count" id="cart-count">0</span></a>
+        </div>
+        <div class="navbar__hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="navbar__mobile" id="mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="about.html">About</a>
+    <a href="faq.html">FAQ</a>
+    <a href="contact.html">Contact</a>
+    <a href="cart.html">Cart</a>
+  </div>
+
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <img
+      class="page-hero__bg"
+      src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1800&q=80"
+      alt="Contact Zalams"
+    />
+    <div class="page-hero__content">
+      <span class="page-hero__label">Get In Touch</span>
+      <h1 class="page-hero__title">Contact Us</h1>
+    </div>
+  </section>
+
+
+  <!-- CONTACT SECTION -->
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- LEFT: Info -->
+        <div class="contact-info">
+
+          <div class="contact-info__block">
+            <span class="contact-info__icon">📍</span>
+            <div>
+              <p class="contact-info__label">Location</p>
+              <p class="contact-info__value">Lagos, Nigeria</p>
+            </div>
+          </div>
+
+          <div class="contact-info__block">
+            <span class="contact-info__icon">📧</span>
+            <div>
+              <p class="contact-info__label">Email</p>
+              <p class="contact-info__value">hello@zalams.com</p>
+            </div>
+          </div>
+
+          <div class="contact-info__block">
+            <span class="contact-info__icon">📞</span>
+            <div>
+              <p class="contact-info__label">Phone</p>
+              <p class="contact-info__value">+234 000 000 0000</p>
+            </div>
+          </div>
+
+          <div class="contact-info__block">
+            <span class="contact-info__icon">🕐</span>
+            <div>
+              <p class="contact-info__label">Hours</p>
+              <p class="contact-info__value">
+                Mon – Sat: 10am – 8pm<br/>
+                Sunday: 12pm – 6pm
+              </p>
+            </div>
+          </div>
+
+          <!-- Socials -->
+          <div class="contact-socials">
+            <p class="contact-info__label">Follow Us</p>
+            <div class="contact-socials__links">
+              <a href="#" class="contact-social">Instagram</a>
+              <a href="#" class="contact-social">Twitter</a>
+              <a href="#" class="contact-social">TikTok</a>
+              <a href="#" class="contact-social">Facebook</a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Form -->
+        <div class="contact-form-wrap">
+          <div class="contact-form__header">
+            <span class="section-subtitle">Send A Message</span>
+            <h2 class="section-title">We'd Love To Hear From You</h2>
+          </div>
+
+          <div class="contact-form" id="contact-form">
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">First Name</label>
+                <input
+                  type="text"
+                  class="form-input"
+                  id="first-name"
+                  placeholder="John"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Last Name</label>
+                <input
+                  type="text"
+                  class="form-input"
+                  id="last-name"
+                  placeholder="Doe"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input
+                type="email"
+                class="form-input"
+                id="contact-email"
+                placeholder="john@example.com"
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Subject</label>
+              <select class="form-input form-select" id="contact-subject">
+                <option value="">Select a subject</option>
+                <option value="order">Order Inquiry</option>
+                <option value="returns">Returns & Refunds</option>
+                <option value="product">Product Question</option>
+                <option value="wholesale">Wholesale</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Message</label>
+              <textarea
+                class="form-input form-textarea"
+                id="contact-message"
+                placeholder="Tell us how we can help you..."
+                rows="5"
+              ></textarea>
+            </div>
+
+            <button class="form-submit" onclick="submitContact()">
+              Send Message
+            </button>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a href="index.html" class="footer__brand-logo">ZALAM<span>S</span></a>
+          <p class="footer__brand-text">Premium clothing and accessories for those who dare to stand out.</p>
+          <div class="footer__socials">
+            <a href="#" class="footer__social-link">IG</a>
+            <a href="#" class="footer__social-link">TW</a>
+            <a href="#" class="footer__social-link">TK</a>
+            <a href="#" class="footer__social-link">FB</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer__col-title">Quick Links</p>
+          <div class="footer__links">
+            <a href="index.html">Home</a>
+            <a href="shop.html">Shop</a>
+            <a href="about.html">About Us</a>
+            <a href="faq.html">FAQ</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer__col-title">Shop</p>
+          <div class="footer__links">
+            <a href="shop.html?category=men-tshirts">Men</a>
+            <a href="shop.html?category=women-tops">Women</a>
+            <a href="shop.html?category=bags">Accessories</a>
+            <a href="shop.html">New In</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer__col-title">Contact</p>
+          <div class="footer__contact-item">
+            <span class="footer__contact-label">Email</span>
+            <span class="footer__contact-value">hello@zalams.com</span>
+          </div>
+          <div class="footer__contact-item">
+            <span class="footer__contact-label">Phone</span>
+            <span class="footer__contact-value">+234 000 000 0000</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copyright">© 2026 <span>Zalams Luxury</span>. All Rights Reserved.</p>
+        <div class="footer__bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Returns</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/shop.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script>
+    function submitContact() {
+      const firstName = document.getElementById('first-name').value.trim();
+      const email = document.getElementById('contact-email').value.trim();
+      const message = document.getElementById('contact-message').value.trim();
+
+      if (!firstName || !email || !message) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      if (!email.includes('@')) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+
+      // Replace form with success message
+      document.getElementById('contact-form').innerHTML = `
+        <div class="contact-success">
+          <span class="contact-success__icon">✓</span>
+          <h3 class="contact-success__title">Message Sent!</h3>
+          <p class="contact-success__text">
+            Thank you ${firstName}! We'll get back to you within 24 hours.
+          </p>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

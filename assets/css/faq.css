@@ -1,0 +1,162 @@
+/* ================================
+   ZALAMS LUXURY — FAQ PAGE
+   faq.css
+================================ */
+
+.faq-section {
+  padding: 80px 0 100px;
+  background-color: var(--color-bg);
+}
+
+.faq-layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+/* --- Tabs --- */
+.faq-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: sticky;
+  top: 100px;
+}
+
+.faq-tab {
+  text-align: left;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  border-left: 2px solid var(--color-border);
+  color: var(--color-grey);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.faq-tab:hover {
+  color: var(--color-white);
+  border-left-color: var(--color-white);
+}
+
+.faq-tab.active {
+  color: var(--color-gold);
+  border-left-color: var(--color-gold);
+}
+
+/* --- FAQ Items --- */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  background: none;
+  border: none;
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  gap: 16px;
+}
+
+.faq-question:hover {
+  color: var(--color-gold);
+}
+
+.faq-icon {
+  font-size: 1.3rem;
+  color: var(--color-gold);
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.faq-item.open .faq-icon {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 300px;
+}
+
+.faq-answer p {
+  font-size: 0.88rem;
+  font-weight: 300;
+  color: var(--color-grey);
+  line-height: 1.9;
+  padding-bottom: 20px;
+}
+
+/* --- Still Have Questions CTA --- */
+.faq-cta {
+  margin-top: 80px;
+  text-align: center;
+  padding: 60px 40px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.faq-cta__title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  margin-bottom: 12px;
+}
+
+.faq-cta__text {
+  font-size: 0.88rem;
+  color: var(--color-grey);
+  margin-bottom: 28px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .faq-layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .faq-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: static;
+    gap: 8px;
+  }
+
+  .faq-tab {
+    border-left: none;
+    border-bottom: 2px solid var(--color-border);
+    padding: 8px 12px;
+  }
+
+  .faq-tab.active {
+    border-bottom-color: var(--color-gold);
+  }
+}

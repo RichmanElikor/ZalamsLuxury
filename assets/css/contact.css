@@ -1,0 +1,226 @@
+/* ================================
+   ZALAMS LUXURY — CONTACT PAGE
+   contact.css
+================================ */
+
+/* --- Contact Section --- */
+.contact-section {
+  padding: 80px 0 100px;
+  background-color: var(--color-bg);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+/* --- Contact Info --- */
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-top: 8px;
+}
+
+.contact-info__block {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.contact-info__icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.contact-info__label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 6px;
+}
+
+.contact-info__value {
+  font-size: 0.9rem;
+  color: var(--color-white);
+  line-height: 1.6;
+}
+
+/* --- Socials --- */
+.contact-socials {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-socials__links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-social {
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-grey);
+  transition: color 0.3s ease;
+  padding-left: 12px;
+  border-left: 2px solid var(--color-border);
+}
+
+.contact-social:hover {
+  color: var(--color-gold);
+  border-left-color: var(--color-gold);
+}
+
+/* --- Contact Form --- */
+.contact-form-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.contact-form__header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-grey);
+}
+
+.form-input {
+  padding: 14px 16px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+  width: 100%;
+}
+
+.form-input::placeholder {
+  color: var(--color-grey);
+}
+
+.form-input:focus {
+  border-color: var(--color-gold);
+}
+
+.form-select {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+}
+
+.form-select option {
+  background-color: var(--color-surface);
+  color: var(--color-white);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.form-submit {
+  padding: 16px 40px;
+  background-color: var(--color-gold);
+  border: none;
+  color: #000;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
+}
+
+.form-submit:hover {
+  background-color: var(--color-gold-light);
+}
+
+/* --- Success Message --- */
+.contact-success {
+  text-align: center;
+  padding: 60px 40px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.contact-success__icon {
+  display: block;
+  font-size: 2.5rem;
+  color: var(--color-gold);
+  margin-bottom: 20px;
+}
+
+.contact-success__title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  margin-bottom: 12px;
+}
+
+.contact-success__text {
+  font-size: 0.9rem;
+  color: var(--color-grey);
+  line-height: 1.8;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-submit {
+    width: 100%;
+    text-align: center;
+  }
+}

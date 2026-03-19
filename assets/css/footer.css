@@ -1,0 +1,177 @@
+/* ================================
+   ZALAMS LUXURY — FOOTER STYLES
+   footer.css
+================================ */
+
+.footer {
+  background-color: #080808;
+  border-top: 1px solid var(--color-border);
+  padding: 80px 0 0;
+}
+
+/* --- Footer Top Grid --- */
+.footer__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;  /* Brand column is wider */
+  gap: 48px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* --- Brand Column --- */
+.footer__brand-logo {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  letter-spacing: 0.15em;
+  color: var(--color-white);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+.footer__brand-logo span {
+  color: var(--color-gold);
+}
+
+.footer__brand-text {
+  font-size: 0.85rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--color-grey);
+  max-width: 280px;
+  margin-bottom: 28px;
+}
+
+/* --- Social Links --- */
+.footer__socials {
+  display: flex;
+  gap: 16px;
+}
+
+.footer__social-link {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-grey);
+  transition: all var(--transition);
+}
+
+.footer__social-link:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  background-color: rgba(201, 168, 76, 0.08);
+}
+
+/* --- Footer Columns --- */
+.footer__col-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  margin-bottom: 24px;
+}
+
+.footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer__links a {
+  font-size: 0.82rem;
+  font-weight: 300;
+  color: var(--color-grey);
+  letter-spacing: 0.05em;
+  transition: color var(--transition), padding var(--transition);
+}
+
+.footer__links a:hover {
+  color: var(--color-white);
+  padding-left: 4px;
+}
+
+/* --- Contact Info --- */
+.footer__contact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.footer__contact-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.footer__contact-value {
+  font-size: 0.82rem;
+  font-weight: 300;
+  color: var(--color-grey);
+  line-height: 1.6;
+}
+
+/* --- Footer Bottom Bar --- */
+.footer__bottom {
+  padding: 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer__copyright {
+  font-size: 0.75rem;
+  color: var(--color-grey);
+  letter-spacing: 0.05em;
+}
+
+.footer__copyright span {
+  color: var(--color-gold);
+}
+
+.footer__bottom-links {
+  display: flex;
+  gap: 24px;
+}
+
+.footer__bottom-links a {
+  font-size: 0.75rem;
+  color: var(--color-grey);
+  letter-spacing: 0.05em;
+  transition: color var(--transition);
+}
+
+.footer__bottom-links a:hover {
+  color: var(--color-white);
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .footer__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 540px) {
+  .footer__grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+}
