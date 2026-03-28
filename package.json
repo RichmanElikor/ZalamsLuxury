@@ -1,0 +1,33 @@
+{
+  "name": "zalamsluxury",
+  "version": "1.0.0",
+  "description": "Zalam's Luxury is a high-end fashion brand that offers a curated collection of premium clothing and accessories for",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RichmanElikor/ZalamsLuxury.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RichmanElikor/ZalamsLuxury/issues"
+  },
+  "homepage": "https://github.com/RichmanElikor/ZalamsLuxury#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "mongoose": "^9.3.1",
+    "stripe": "^20.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

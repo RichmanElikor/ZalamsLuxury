@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Confirmed — Zalams Luxury</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/navbar.css" />
+  <link rel="stylesheet" href="assets/css/footer.css" />
+  <style>
+    .success-section {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px;
+      margin-top: 61px;
+    }
+
+    .success-card {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      padding: 60px 48px;
+      text-align: center;
+      max-width: 560px;
+      width: 100%;
+    }
+
+    .success-icon {
+      font-size: 4rem;
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    .success-title {
+      font-family: var(--font-heading);
+      font-size: 2.5rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-white);
+      margin-bottom: 16px;
+    }
+
+    .success-text {
+      font-size: 0.9rem;
+      color: var(--color-grey);
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+
+    .success-order-id {
+      font-size: 0.78rem;
+      color: var(--color-gold);
+      letter-spacing: 0.1em;
+      margin-bottom: 32px;
+    }
+
+    .success-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .success-divider {
+      height: 1px;
+      background-color: var(--color-border);
+      margin: 32px 0;
+    }
+
+    .success-steps {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .success-step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .success-step__number {
+      width: 28px;
+      height: 28px;
+      background-color: var(--color-gold);
+      color: #000;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .success-step__text {
+      font-size: 0.85rem;
+      color: var(--color-grey);
+      line-height: 1.6;
+      padding-top: 4px;
+    }
+
+    .success-step__text strong {
+      color: var(--color-white);
+      display: block;
+      margin-bottom: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <div class="navbar__inner">
+        <a href="index.html" class="navbar__logo">ZALAM<span>S</span></a>
+        <ul class="navbar__links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="navbar__actions">
+          <a href="#" class="search-link">Search</a>
+          <a href="#" class="account-link">Account</a>
+          <a href="cart.html">Cart <span class="cart-count" id="cart-count">0</span></a>
+        </div>
+        <div class="navbar__hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="navbar__mobile" id="mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="about.html">About</a>
+    <a href="faq.html">FAQ</a>
+    <a href="contact.html">Contact</a>
+    <a href="cart.html">Cart</a>
+  </div>
+
+
+  <!-- SUCCESS SECTION -->
+  <section class="success-section">
+    <div class="success-card">
+
+      <span class="success-icon">✅</span>
+      <h1 class="success-title">Order Confirmed!</h1>
+      <p class="success-text">
+        Thank you for your order. We've received your payment
+        and your items are being prepared.
+      </p>
+      <p class="success-order-id" id="order-id">
+        Loading order details...
+      </p>
+
+      <div class="success-divider"></div>
+
+      <div class="success-steps">
+        <div class="success-step">
+          <div class="success-step__number">1</div>
+          <div class="success-step__text">
+            <strong>Order Confirmed</strong>
+            Your payment was successful and order is confirmed.
+          </div>
+        </div>
+        <div class="success-step">
+          <div class="success-step__number">2</div>
+          <div class="success-step__text">
+            <strong>Processing</strong>
+            Your items are being carefully packaged.
+          </div>
+        </div>
+        <div class="success-step">
+          <div class="success-step__number">3</div>
+          <div class="success-step__text">
+            <strong>Delivery</strong>
+            Your order will be delivered within 3–5 business days.
+          </div>
+        </div>
+      </div>
+
+      <div class="success-divider"></div>
+
+      <div class="success-actions">
+        <a href="shop.html" class="btn-gold">Continue Shopping</a>
+        <a href="index.html" class="btn-outline">Back to Home</a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a href="index.html" class="footer__brand-logo">ZALAM<span>S</span></a>
+          <p class="footer__brand-text">Premium clothing and accessories.</p>
+          <div class="footer__socials">
+            <a href="#" class="footer__social-link">IG</a>
+            <a href="#" class="footer__social-link">TW</a>
+            <a href="#" class="footer__social-link">TK</a>
+            <a href="#" class="footer__social-link">FB</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer__col-title">Quick Links</p>
+          <div class="footer__links">
+            <a href="index.html">Home</a>
+            <a href="shop.html">Shop</a>
+            <a href="about.html">About Us</a>
+            <a href="faq.html">FAQ</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer__col-title">Contact</p>
+          <div class="footer__contact-item">
+            <span class="footer__contact-label">Email</span>
+            <span class="footer__contact-value">hello@zalams.com</span>
+          </div>
+          <div class="footer__contact-item">
+            <span class="footer__contact-label">Phone</span>
+            <span class="footer__contact-value">+234 000 000 0000</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copyright">© 2026 <span>Zalams Luxury</span>. All Rights Reserved.</p>
+        <div class="footer__bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Returns</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/shop.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script>
+    // Verify payment and show order details
+    async function verifyPayment() {
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get('session_id');
+
+      if (!sessionId) {
+        document.getElementById('order-id').textContent =
+          'No session found.';
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/payment/verify/${sessionId}`);
+        const data = await response.json();
+
+        if (data.success && data.paid) {
+          document.getElementById('order-id').textContent =
+            `Order ID: ${data.order._id}`;
+
+          // Clear cart after successful payment
+          clearEntireCart();
+        } else {
+          document.getElementById('order-id').textContent =
+            'Payment verification pending...';
+        }
+      } catch (error) {
+        document.getElementById('order-id').textContent =
+          'Could not verify payment.';
+      }
+    }
+
+    verifyPayment();
+  </script>
+</body>
+</html>

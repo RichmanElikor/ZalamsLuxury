@@ -167,8 +167,68 @@ function clearCart() {
 
 
 // --- Proceed to checkout ---
-function proceedToCheckout() {
-  alert('Checkout coming soon! This will connect to Stripe in Phase 3.');
+async function proceedToCheckout() {
+  if (cart.length === 0) {
+    alert('Your cart is empty!');
+    return;
+  }
+
+  // Get subtotal and delivery
+  const subtotal = getCartTotal();
+  const deliveryFee = subtotal >= 50000 ? 0 : 5000;
+  const total = subtotal + deliveryFee;
+
+  // Show loading state on button
+  const btn = document.querySelector('.btn-checkout');
+  btn.textContent = 'Processing...';
+  btn.disabled = true;
+
+  try {
+    // Send cart to backend
+    const response = await fetch('/api/payment/create-checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        customerName: 'Guest',        // We'll collect this properly later
+        email: 'guest@zalams.com',    // Will come from login system later
+        phone: '00000000000',
+        address: {
+          street: 'TBD',
+          city: 'TBD',
+          state: 'TBD'
+        },
+        items: cart.map(item => ({
+          productId: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.image
+        })),
+        subtotal,
+        deliveryFee,
+        total
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      // Redirect to Stripe checkout page
+      window.location.href = data.sessionUrl;
+    } else {
+      alert('Checkout failed: ' + data.message);
+      btn.textContent = 'Proceed to Checkout';
+      btn.disabled = false;
+    }
+
+  } catch (error) {
+    console.error('Checkout error:', error);
+    alert('Something went wrong. Please try again.');
+    btn.textContent = 'Proceed to Checkout';
+    btn.disabled = false;
+  }
 }
 
 
