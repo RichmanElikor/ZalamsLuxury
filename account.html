@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Account — Zalams Luxury</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/navbar.css" />
+  <link rel="stylesheet" href="assets/css/footer.css" />
+  <link rel="stylesheet" href="assets/css/account.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <div class="navbar__inner">
+        <a href="index.html" class="navbar__logo">ZALAM<span>S</span></a>
+        <ul class="navbar__links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="navbar__actions">
+          <a href="cart.html">Cart <span class="cart-count" id="cart-count">0</span></a>
+          <div class="account-dropdown">
+            <a href="login.html" class="account-link">Account</a>
+            <div class="account-dropdown__menu" id="account-menu">
+              <!-- Shown when NOT logged in -->
+              <div id="guest-menu">
+                <a href="login.html" class="account-dropdown__item">Login</a>
+                <a href="signup.html" class="account-dropdown__item">Sign Up</a>
+              </div>
+              <!-- Shown when logged in -->
+              <div id="user-menu" style="display:none">
+                <a href="javascript:void(0)"
+                  class="account-dropdown__item"
+                  onclick="window.location.href = getUser()?.role === 'admin' ? 'admin.html' : 'account.html'">
+                  My Account
+                </a>
+                <a href="javascript:void(0)"
+                  class="account-dropdown__item"
+                  onclick="window.location.href = getUser()?.role === 'admin' ? 'admin.html' : 'account.html#orders'">
+                  My Orders
+                </a>
+                <button class="account-dropdown__item logout" onclick="handleLogout()">
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="navbar__hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="navbar__mobile" id="mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="about.html">About</a>
+    <a href="faq.html">FAQ</a>
+    <a href="contact.html">Contact</a>
+    <a href="cart.html">Cart</a>
+  </div>
+
+
+  <!-- ACCOUNT SECTION -->
+  <section class="account-section">
+    <div class="container">
+
+      <!-- Account Header -->
+      <div class="account-header">
+        <div class="account-header__info">
+          <div class="account-avatar" id="account-avatar">Z</div>
+          <div>
+            <h1 class="account-name" id="account-name">Loading...</h1>
+            <p class="account-email" id="account-email">...</p>
+          </div>
+        </div>
+        <button class="account-logout-btn" onclick="handleLogout()">
+          Logout
+        </button>
+      </div>
+
+      <!-- Account Tabs -->
+      <div class="account-tabs">
+        <button class="account-tab active" data-tab="orders">
+          My Orders
+        </button>
+        <button class="account-tab" data-tab="profile">
+          My Profile
+        </button>
+      </div>
+
+      <!-- Orders Tab -->
+      <div class="account-content active" id="tab-orders">
+        <div class="orders-list" id="orders-list">
+          <div class="orders-loading">Loading your orders...</div>
+        </div>
+      </div>
+
+      <!-- Profile Tab -->
+      <div class="account-content" id="tab-profile">
+        <div class="profile-form">
+
+          <div class="profile-section-title">Personal Information</div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-input" id="profile-name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-input" id="profile-email" disabled />
+            </div>
+          </div>
+
+          <div class="profile-section-title" style="margin-top: 32px;">
+            Delivery Address
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Street Address</label>
+            <input type="text" class="form-input" id="profile-street" placeholder="123 Main Street" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">City</label>
+              <input type="text" class="form-input" id="profile-city" placeholder="Lagos" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">State</label>
+              <input type="text" class="form-input" id="profile-state" placeholder="Lagos State" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input type="text" class="form-input" id="profile-phone" placeholder="+234 000 000 0000" />
+          </div>
+
+          <p class="profile-success" id="profile-success"></p>
+
+          <button class="auth-submit" onclick="saveProfile()" style="max-width: 200px;">
+            Save Changes
+          </button>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a href="index.html" class="footer__brand-logo">ZALAM<span>S</span></a>
+          <p class="footer__brand-text">Premium clothing and accessories.</p>
+          <div class="footer__socials">
+            <a href="#" class="footer__social-link">IG</a>
+            <a href="#" class="footer__social-link">TW</a>
+            <a href="#" class="footer__social-link">TK</a>
+            <a href="#" class="footer__social-link">FB</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer__col-title">Quick Links</p>
+          <div class="footer__links">
+            <a href="index.html">Home</a>
+            <a href="shop.html">Shop</a>
+            <a href="about.html">About Us</a>
+            <a href="faq.html">FAQ</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer__col-title">Contact</p>
+          <div class="footer__contact-item">
+            <span class="footer__contact-label">Email</span>
+            <span class="footer__contact-value">hello@zalams.com</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copyright">© 2026 <span>Zalams Luxury</span>. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/shop.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/account.js"></script>
+</body>
+</html>

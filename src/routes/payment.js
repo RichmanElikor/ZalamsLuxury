@@ -1,19 +1,18 @@
-/* ================================
-   ZALAMS LUXURY — PAYMENT ROUTE
-   src/routes/payment.js
-================================ */
-
 import express from 'express';
 import Stripe from 'stripe';
 import Order from '../models/Order.js';
+import {
+  sendEmail,
+  orderConfirmationEmail,
+  newOrderAlertEmail
+} from '../config/email.js';
 
 const router = express.Router();
 
-// Lazy-load Stripe so it reads the key AFTER dotenv has loaded
 function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key || key === 'placeholder') {
-    throw new Error('STRIPE_SECRET_KEY is missing from your .env file. Add it and restart the server.');
+    throw new Error('STRIPE_SECRET_KEY is missing');
   }
   return new Stripe(key);
 }
@@ -24,14 +23,24 @@ router.post('/create-checkout', async (req, res) => {
   try {
     const stripe = getStripe();
 
-    const { customerName, email, phone, address, items, subtotal, deliveryFee, total } = req.body;
+    const {
+      customerName,
+      email,
+      phone,
+      address,
+      items,
+      subtotal,
+      deliveryFee,
+      total
+    } = req.body;
 
     if (!items || items.length === 0) {
-      return res.status(400).json({ success: false, message: 'No items in cart' });
+      return res.status(400).json({
+        success: false,
+        message: 'No items in cart'
+      });
     }
 
-    // Stripe only accepts publicly accessible image URLs.
-    // On localhost they cause session creation to fail, so skip images in dev.
     const isProd = process.env.NODE_ENV === 'production';
 
     const lineItems = items.map(item => ({
@@ -73,6 +82,7 @@ router.post('/create-checkout', async (req, res) => {
       }
     });
 
+    // Save order to DB
     const order = await Order.create({
       customerName,
       email,
@@ -87,6 +97,10 @@ router.post('/create-checkout', async (req, res) => {
       stripeSessionId: session.id
     });
 
+    // Send emails
+    sendEmail(orderConfirmationEmail(order));
+    sendEmail(newOrderAlertEmail(order));
+
     res.json({
       success: true,
       sessionId: session.id,
@@ -98,9 +112,7 @@ router.post('/create-checkout', async (req, res) => {
     console.error('❌ Checkout error:', error.message);
     res.status(500).json({
       success: false,
-      message: error.message.includes('STRIPE_SECRET_KEY')
-        ? error.message
-        : 'Could not create checkout session',
+      message: 'Could not create checkout session',
       error: error.message
     });
   }
@@ -114,7 +126,11 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
   try {
     const stripe = getStripe();
-    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
   } catch (error) {
     console.error('Webhook signature failed:', error.message);
     return res.status(400).send(`Webhook Error: ${error.message}`);
@@ -141,19 +157,30 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 router.get('/verify/:sessionId', async (req, res) => {
   try {
     const stripe = getStripe();
-    const session = await stripe.checkout.sessions.retrieve(req.params.sessionId);
+    const session = await stripe.checkout.sessions.retrieve(
+      req.params.sessionId
+    );
 
     if (session.payment_status === 'paid') {
-      const order = await Order.findOne({ stripeSessionId: req.params.sessionId });
+      const order = await Order.findOne({
+        stripeSessionId: req.params.sessionId
+      });
       res.json({ success: true, paid: true, order });
     } else {
-      res.json({ success: false, paid: false, message: 'Payment not completed' });
+      res.json({
+        success: false,
+        paid: false,
+        message: 'Payment not completed'
+      });
     }
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Could not verify payment', error: error.message });
+    res.status(500).json({
+      success: false,
+      message: 'Could not verify payment',
+      error: error.message
+    });
   }
 });
 
 
 export default router;
-

@@ -5,17 +5,16 @@
 
 import express from 'express';
 import Message from '../models/Message.js';
+import { sendEmail, contactFormEmail } from '../config/email.js';
 
 const router = express.Router();
 
 
 // --- POST /api/contact ---
-// Save a contact message
 router.post('/', async (req, res) => {
   try {
     const { firstName, lastName, email, subject, message } = req.body;
 
-    // Validation
     if (!firstName || !email || !message) {
       return res.status(400).json({
         success: false,
@@ -30,6 +29,9 @@ router.post('/', async (req, res) => {
       subject,
       message
     });
+
+    // Send notification email to admin
+    sendEmail(contactFormEmail(newMessage));
 
     res.status(201).json({
       success: true,
@@ -48,7 +50,6 @@ router.post('/', async (req, res) => {
 
 
 // --- GET /api/contact ---
-// Get all messages (admin only later)
 router.get('/', async (req, res) => {
   try {
     const messages = await Message.find().sort({ createdAt: -1 });

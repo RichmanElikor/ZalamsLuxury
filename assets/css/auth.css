@@ -1,0 +1,380 @@
+/* ================================
+   ZALAMS LUXURY — AUTH PAGES
+   auth.css
+================================ */
+
+body.auth-page {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* --- Auth Layout: Split Screen --- */
+.auth-layout {
+  display: flex;
+  min-height: calc(100vh - 61px);
+  margin-top: 61px;
+}
+
+/* --- Image Side --- */
+.auth-image-side {
+  width: 55%;
+  position: relative;
+  overflow: hidden;
+  animation: slideInLeft 0.6s ease forwards;
+}
+
+.auth-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform 8s ease;
+}
+
+.auth-image:hover {
+  transform: scale(1.04);
+}
+
+.auth-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.7) 0%,
+    rgba(0,0,0,0.1) 60%,
+    transparent 100%
+  );
+  display: flex;
+  align-items: flex-end;
+  padding: 40px;
+}
+
+.auth-image-text {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  letter-spacing: 0.12em;
+  color: var(--color-white);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* --- Form Side --- */
+.auth-form-side {
+  width: 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg);
+  padding: 60px 40px;
+  animation: slideInRight 0.6s ease forwards;
+}
+
+/* --- Form Wrap --- */
+.auth-form-wrap {
+  width: 100%;
+  max-width: 360px;
+}
+
+/* --- Form Header --- */
+.auth-form-header {
+  margin-bottom: 40px;
+}
+
+.auth-title {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.auth-subtitle {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+/* --- Form Fields --- */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.auth-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-grey);
+  margin-bottom: 10px;
+}
+
+/* --- Input Wrap (for eye icon) --- */
+.auth-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-input-wrap .auth-input {
+  width: 100%;
+  padding-right: 36px;
+}
+
+/* --- Input --- */
+.auth-input {
+  width: 100%;
+  padding: 10px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #333;
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.auth-input::placeholder {
+  color: #444;
+  font-size: 0.82rem;
+}
+
+.auth-input:focus {
+  border-bottom-color: var(--color-gold);
+}
+
+/* --- Eye Icon --- */
+.auth-eye {
+  position: absolute;
+  right: 0;
+  background: none;
+  border: none;
+  color: #444;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.3s ease;
+}
+
+.auth-eye:hover {
+  color: var(--color-gold);
+}
+
+/* --- Forgot Password --- */
+.auth-forgot {
+  text-align: right;
+  margin-top: -12px;
+}
+
+.auth-forgot a {
+  font-size: 0.7rem;
+  color: var(--color-grey);
+  letter-spacing: 0.05em;
+  transition: color 0.3s ease;
+}
+
+.auth-forgot a:hover {
+  color: var(--color-gold);
+}
+
+/* --- Error Message --- */
+.auth-error {
+  font-size: 0.78rem;
+  color: #ff4444;
+  letter-spacing: 0.05em;
+  min-height: 16px;
+  margin: -8px 0;
+}
+
+/* --- Submit Button --- */
+.auth-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--color-gold);
+  border: none;
+  color: #000;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-btn:hover {
+  background-color: var(--color-gold-light);
+}
+
+.auth-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --- Switch Link --- */
+.auth-switch {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-grey);
+  padding-bottom: 8px;
+}
+
+.auth-switch a {
+  color: var(--color-gold);
+  font-weight: 500;
+}
+
+/* --- Animations --- */
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* --- Forgot/Reset Password Pages --- */
+.auth-section {
+  min-height: calc(100vh - 61px);
+  margin-top: 61px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  background-color: var(--color-bg);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 48px 40px;
+}
+
+.auth-card__header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.auth-card__logo {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  letter-spacing: 0.12em;
+  color: var(--color-white);
+  margin-bottom: 24px;
+  text-decoration: none;
+}
+
+.auth-card__logo span {
+  color: var(--color-gold);
+}
+
+.auth-card__title {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  margin-bottom: 8px;
+}
+
+.auth-card__subtitle {
+  font-size: 0.85rem;
+  color: var(--color-grey);
+  letter-spacing: 0.05em;
+}
+
+.auth-card .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.auth-card .form-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-grey);
+}
+
+.auth-card .form-input {
+  padding: 14px 16px;
+  background-color: #1a1a1a;
+  border: 1px solid var(--color-border);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+  width: 100%;
+}
+
+.auth-card .form-input:focus {
+  border-color: var(--color-gold);
+}
+
+.auth-submit {
+  width: 100%;
+  padding: 16px;
+  background-color: var(--color-gold);
+  border: none;
+  color: #000;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 8px;
+}
+
+.auth-submit:hover {
+  background-color: var(--color-gold-light);
+}
+
+.auth-card .auth-error {
+  font-size: 0.78rem;
+  color: #ff4444;
+  min-height: 16px;
+  margin-bottom: 8px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .auth-layout {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .auth-image-side {
+    width: 100%;
+    height: 260px;
+    order: 0;
+  }
+
+  .auth-form-side {
+    width: 100%;
+    padding: 48px 24px;
+    order: 1;
+  }
+}

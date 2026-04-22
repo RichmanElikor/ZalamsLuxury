@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up — Zalams Luxury</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/navbar.css" />
+  <link rel="stylesheet" href="assets/css/auth.css" />
+</head>
+<body class="auth-page">
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <div class="navbar__inner">
+        <a href="index.html" class="navbar__logo">ZALAM<span>S</span></a>
+        <ul class="navbar__links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="navbar__actions">
+          <a href="cart.html">Cart <span class="cart-count" id="cart-count">0</span></a>
+        </div>
+        <div class="navbar__hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="navbar__mobile" id="mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="about.html">About</a>
+    <a href="faq.html">FAQ</a>
+    <a href="contact.html">Contact</a>
+    <a href="cart.html">Cart</a>
+  </div>
+
+  <!-- AUTH LAYOUT -->
+  <div class="auth-layout">
+
+    <!-- LEFT: Fashion Image -->
+    <div class="auth-image-side">
+      <img
+        src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=800&q=80"
+        alt="Zalams Fashion"
+        class="auth-image"
+      />
+      <div class="auth-image-overlay">
+        <p class="auth-image-text">Join The Bold</p>
+      </div>
+    </div>
+
+    <!-- RIGHT: Form -->
+    <div class="auth-form-side">
+      <div class="auth-form-wrap">
+
+        <div class="auth-form-header">
+          <h1 class="auth-title">Register</h1>
+          <p class="auth-subtitle">New User</p>
+        </div>
+
+        <div class="auth-form">
+
+          <div class="auth-field">
+            <label class="auth-label">Full Name</label>
+            <input type="text" class="auth-input"
+              id="signup-name" placeholder="John Doe" />
+          </div>
+
+          <div class="auth-field">
+            <label class="auth-label">Email</label>
+            <input type="email" class="auth-input"
+              id="signup-email" placeholder="your@email.com" />
+          </div>
+
+          <div class="auth-field">
+            <label class="auth-label">Password</label>
+            <div class="auth-input-wrap">
+              <input type="password" class="auth-input"
+                id="signup-password" placeholder="At least 6 characters" />
+              <button type="button" class="auth-eye"
+                onclick="togglePassword('signup-password', this)">
+                👁
+              </button>
+            </div>
+          </div>
+
+          <div class="auth-field">
+            <label class="auth-label">Confirm Password</label>
+            <div class="auth-input-wrap">
+              <input type="password" class="auth-input"
+                id="signup-confirm" placeholder="Repeat password" />
+              <button type="button" class="auth-eye"
+                onclick="togglePassword('signup-confirm', this)">
+                👁
+              </button>
+            </div>
+          </div>
+
+          <p class="auth-error" id="signup-error"></p>
+
+          <button class="auth-btn" id="signup-btn"
+            onclick="handleSignup()">
+            Create Account
+          </button>
+
+          <p class="auth-switch">
+            Already have an account?
+            <a href="login.html">Log In</a>
+          </p>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/shop.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/auth.js"></script>
+</body>
+</html>

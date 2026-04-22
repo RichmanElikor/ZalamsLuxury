@@ -1,83 +1,39 @@
 /* ================================
    ZALAMS LUXURY — SHOP JS
-   shop.js
+   assets/js/shop.js
 ================================ */
 
-// --- Product Data ---
-const products = [
-  {
-    id: 1,
-    name: "Zalams Classic Tee",
-    price: 25000,
-    category: "men-tshirts",
-    tag: "New In",
-    colors: ["#000000", "#ffffff", "#c9a84c"],
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80"
-  },
-  {
-    id: 2,
-    name: "Luxury Leather Jacket",
-    price: 120000,
-    category: "men-outerwear",
-    tag: "New In",
-    colors: ["#000000", "#4a3728"],
-    image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&q=80"
-  },
-  {
-    id: 3,
-    name: "Zalams Denim",
-    price: 45000,
-    category: "men-denim",
-    tag: "New In",
-    colors: ["#1a237e", "#000000"],
-    image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80"
-  },
-{
-    id: 4,
-    name: "Signature Hoodie",
-    price: 55000,
-    category: "men-tshirts",
-    tag: "New In",
-    colors: ["#000000", "#888888", "#c9a84c"],
-    image: "https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=600&q=80"
-  },
-  {
-    id: 5,
-    name: "Zalams Gown",
-    price: 85000,
-    category: "women-gowns",
-    tag: "New In",
-    colors: ["#000000", "#c9a84c"],
-    image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&q=80"
-  },
-  {
-    id: 6,
-    name: "Premium Shoulder Bag",
-    price: 65000,
-    category: "bags",
-    tag: "New In",
-    colors: ["#000000", "#4a3728"],
-    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80"
-  },
-  {
-    id: 7,
-    name: "Zalams Fitted Shirt",
-    price: 35000,
-    category: "men-shirts",
-    tag: "New In",
-    colors: ["#ffffff", "#000000", "#1a237e"],
-    image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&q=80"
-  },
-  {
-    id: 8,
-    name: "Luxury Silk Top",
-    price: 42000,
-    category: "women-tops",
-    tag: "New In",
-    colors: ["#000000", "#c9a84c", "#ffffff"],
-    image: "https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=600&q=80"
+var API = 'http://localhost:3000/api';
+
+// --- Products array (will be filled from API) ---
+let products = [];
+
+
+// --- Fetch products from backend ---
+async function fetchProducts() {
+  try {
+    const response = await fetch(`${API}/products`);
+    const data = await response.json();
+
+    if (data.success) {
+      products = data.products.map(p => ({
+        id: p._id,
+        name: p.name,
+        price: p.price,
+        category: p.category,
+        tag: p.tag || 'New In',
+        colors: p.colors || ['#000000'],
+        image: p.images?.[0] || p.image || '',
+        description: p.description,
+        sizes: p.sizes || [],
+        inStock: p.inStock
+      }));
+    }
+  } catch (error) {
+    console.error('Could not fetch products:', error);
+    products = [];
   }
-];
+}
 
 
 // --- Helpers ---
@@ -86,6 +42,7 @@ function formatPrice(amount) {
 }
 
 function renderColorDots(colors, prefix = 'card') {
+  if (!colors || colors.length === 0) return '';
   return colors.map(c =>
     `<span class="${prefix}__color-dot" style="background-color:${c}"></span>`
   ).join('');
@@ -98,11 +55,18 @@ function createProductCard(product) {
     <div class="product-card" data-id="${product.id}">
       <div class="product-card__img-wrap">
         <span class="product-card__tag">${product.tag}</span>
-        <img class="product-card__img" src="${product.image}"
-          alt="${product.name}" loading="lazy" />
+        <img
+          class="product-card__img"
+          src="${product.image}"
+          alt="${product.name}"
+          loading="lazy"
+          onerror="this.src='assets/images/placeholder.jpg'"
+        />
         <div class="product-card__overlay">
           <button class="product-card__overlay-btn"
-            onclick="addToCart(${product.id})">Add to Cart</button>
+            onclick="addToCart('${product.id}')">
+            Add to Cart
+          </button>
         </div>
       </div>
       <div class="product-card__info">
@@ -119,14 +83,19 @@ function createProductCard(product) {
 }
 
 
-// --- Shop Page Card (Richman-inspired) ---
+// --- Shop Page Card ---
 function createShopCard(product) {
   return `
     <div class="shop-card" data-id="${product.id}">
       <div class="shop-card__img-wrap">
         <span class="shop-card__tag">${product.tag}</span>
-        <img class="shop-card__img" src="${product.image}"
-          alt="${product.name}" loading="lazy" />
+        <img
+          class="shop-card__img"
+          src="${product.image}"
+          alt="${product.name}"
+          loading="lazy"
+          onerror="this.src='assets/images/placeholder.jpg'"
+        />
       </div>
       <div class="shop-card__body">
         <p class="shop-card__name">${product.name}</p>
@@ -147,14 +116,24 @@ function createShopCard(product) {
 function renderProducts(containerId, items) {
   const container = document.getElementById(containerId);
   if (!container) return;
+
+  if (items.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:40px 0;">
+        <p style="color:var(--color-grey);font-size:0.85rem;
+          letter-spacing:0.1em;text-transform:uppercase;">
+          No products yet. Check back soon!
+        </p>
+      </div>
+    `;
+    return;
+  }
+
   container.innerHTML = items.map(createProductCard).join('');
 }
 
-renderProducts('new-in-grid', products.slice(0, 8));
-renderProducts('explore-grid', products.slice(3, 8));
 
-
-// --- Shop Page Logic ---
+// --- Shop Page Filter Logic ---
 function getQueryParam(param) {
   return new URLSearchParams(window.location.search).get(param);
 }
@@ -169,47 +148,48 @@ function filterProducts(filter) {
   return products.filter(p => p.category === filter);
 }
 
+
+// --- Init Shop Page ---
 function initShopPage() {
   const shopGrid = document.getElementById('shop-grid');
   if (!shopGrid) return;
 
   const tabs = document.querySelectorAll('.category-tab');
   const resultsCount = document.getElementById('results-count');
-
-  // Read URL param once on load only
   let urlCategory = getQueryParam('category');
 
-  // Determine which tab to activate on load
   let activeFilter = 'all';
   if (urlCategory) {
     if (urlCategory.startsWith('men')) activeFilter = 'men';
     else if (urlCategory.startsWith('women')) activeFilter = 'women';
-    else if (['bags', 'hats', 'belts'].includes(urlCategory)) activeFilter = 'accessories';
+    else if (['bags', 'hats', 'belts'].includes(urlCategory)) {
+      activeFilter = 'accessories';
+    }
   }
 
   function display(filter) {
     let items;
-
-    // Only use URL category on first load
     if (urlCategory && filter === activeFilter) {
       items = products.filter(p => p.category === urlCategory);
     } else {
       items = filterProducts(filter);
     }
 
-    resultsCount.textContent = items.length;
+    if (resultsCount) resultsCount.textContent = items.length;
+
     shopGrid.innerHTML = items.length === 0
       ? `<div class="no-results"><p>No products found</p></div>`
       : items.map(createShopCard).join('');
   }
 
   function setActive(filter) {
-    tabs.forEach(t => t.classList.toggle('active', t.dataset.filter === filter));
+    tabs.forEach(t =>
+      t.classList.toggle('active', t.dataset.filter === filter)
+    );
   }
 
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
-      // Clear URL category completely when any tab is clicked
       urlCategory = null;
       activeFilter = tab.dataset.filter;
       setActive(activeFilter);
@@ -222,4 +202,134 @@ function initShopPage() {
   display(activeFilter);
 }
 
-initShopPage();
+
+// --- Init Product Detail Page ---
+function initProductPage() {
+  const productSection = document.querySelector('.product-detail');
+  if (!productSection) return;
+
+  const productId = getQueryParam('id');
+  const product = products.find(p => p.id === productId);
+
+  if (!product) {
+    productSection.innerHTML = `
+      <div class="container" style="padding:100px 0;text-align:center">
+        <p style="color:var(--color-grey);font-size:1.5rem;
+          font-family:var(--font-heading);letter-spacing:0.1em">
+          PRODUCT NOT FOUND
+        </p>
+        <a href="shop.html"
+          style="color:var(--color-gold);margin-top:16px;display:inline-block">
+          ← Back to Shop
+        </a>
+      </div>
+    `;
+    return;
+  }
+
+  // Set page title
+  document.title = `${product.name} — Zalams Luxury`;
+
+  // Breadcrumb
+  const breadcrumb = document.getElementById('breadcrumb-name');
+  if (breadcrumb) breadcrumb.textContent = product.name;
+
+  // Tag, Name, Price
+  const tagEl = document.getElementById('product-tag');
+  const nameEl = document.getElementById('product-name');
+  const priceEl = document.getElementById('product-price');
+  if (tagEl) tagEl.textContent = product.tag;
+  if (nameEl) nameEl.textContent = product.name;
+  if (priceEl) priceEl.textContent = formatPrice(product.price);
+
+  // Main image
+  const mainImg = document.getElementById('gallery-main-img');
+  if (mainImg) {
+    mainImg.src = product.image;
+    mainImg.alt = product.name;
+  }
+
+  // Thumbnails
+  const thumbsContainer = document.getElementById('gallery-thumbs');
+  if (thumbsContainer) {
+    const images = [product.image, product.image, product.image];
+    thumbsContainer.innerHTML = images.map((img, i) => `
+      <img
+        class="gallery__thumb ${i === 0 ? 'active' : ''}"
+        src="${img}"
+        alt="${product.name} view ${i + 1}"
+        data-index="${i}"
+      />
+    `).join('');
+
+    thumbsContainer.querySelectorAll('.gallery__thumb').forEach(thumb => {
+      thumb.addEventListener('click', () => {
+        thumbsContainer.querySelectorAll('.gallery__thumb')
+          .forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+        if (mainImg) mainImg.src = images[parseInt(thumb.dataset.index)];
+      });
+    });
+  }
+
+  // Color options
+  const colorNames = ['Black', 'White', 'Gold', 'Navy', 'Grey', 'Brown'];
+  const colorContainer = document.getElementById('color-options');
+  if (colorContainer) {
+    colorContainer.innerHTML = (product.colors || []).map((color, i) => `
+      <div
+        class="color-option ${i === 0 ? 'active' : ''}"
+        style="background-color: ${color}"
+        data-color="${colorNames[i] || color}"
+        title="${colorNames[i] || color}"
+      ></div>
+    `).join('');
+
+    const colorNameDisplay = document.getElementById('selected-color-name');
+    colorContainer.querySelectorAll('.color-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        colorContainer.querySelectorAll('.color-option')
+          .forEach(c => c.classList.remove('active'));
+        opt.classList.add('active');
+        if (colorNameDisplay) colorNameDisplay.textContent = opt.dataset.color;
+      });
+    });
+  }
+
+  // Related products
+  const related = products
+    .filter(p => p.category === product.category && p.id !== product.id)
+    .slice(0, 4);
+
+  const relatedGrid = document.getElementById('related-grid');
+  if (relatedGrid) {
+    const relatedItems = related.length > 0
+      ? related
+      : products.filter(p => p.id !== product.id).slice(0, 4);
+    relatedGrid.innerHTML = relatedItems.map(createProductCard).join('');
+  }
+}
+
+
+// ================================
+// MAIN INIT — runs on every page
+// ================================
+async function init() {
+  // Fetch products from API
+  await fetchProducts();
+
+  // Homepage grids
+  const newInGrid = document.getElementById('new-in-grid');
+  const exploreGrid = document.getElementById('explore-grid');
+
+  if (newInGrid) renderProducts('new-in-grid', products.slice(0, 8));
+  if (exploreGrid) renderProducts('explore-grid', products.slice(4, 8));
+
+  // Shop page
+  initShopPage();
+
+  // Product detail page
+  initProductPage();
+}
+
+init();

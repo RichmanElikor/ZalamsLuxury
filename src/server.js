@@ -15,6 +15,7 @@ import productsRouter from './routes/products.js';
 import ordersRouter from './routes/orders.js';
 import contactRouter from './routes/contact.js';
 import paymentRouter from './routes/payment.js';
+import authRouter from './routes/auth.js';
 
 // --- Setup ---
 dotenv.config();
@@ -49,6 +50,7 @@ app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/payment', paymentRouter);
+app.use('/api/auth', authRouter);
 
 // --- Health Check ---
 app.get('/api/health', (req, res) => {

@@ -3,24 +3,58 @@
    cart.js
 ================================ */
 
+// --- Get cart key based on logged in user ---
+function getCartKey() {
+  const user = JSON.parse(localStorage.getItem('zalams-user') || 'null');
+  return user ? `zalams-cart-${user.id}` : null;
+}
+
 // --- Cart State ---
-let cart = JSON.parse(localStorage.getItem('zalams-cart')) || [];
+function loadCart() {
+  const key = getCartKey();
+  if (!key) return [];
+  try {
+    return JSON.parse(localStorage.getItem(key)) || [];
+  } catch {
+    return [];
+  }
+}
+
+let cart = loadCart();
 
 // --- Save cart to localStorage ---
 function saveCart() {
-  localStorage.setItem('zalams-cart', JSON.stringify(cart));
+  const key = getCartKey();
+  if (!key) return;
+  localStorage.setItem(key, JSON.stringify(cart));
   updateCartCount();
 }
 
 // --- Update cart count badge in navbar ---
 function updateCartCount() {
   const countEls = document.querySelectorAll('#cart-count');
+  const key = getCartKey();
+
+  if (!key) {
+    // Not logged in — show 0
+    countEls.forEach(el => el.textContent = 0);
+    return;
+  }
+
   const total = cart.reduce((sum, item) => sum + item.quantity, 0);
-  countEls.forEach(el => el.textContent = total);
+  countEls.forEach(el => el.textContent = total || 0);
 }
 
 // --- Add item to cart ---
 function addToCart(productId, quantity = 1) {
+  const user = JSON.parse(localStorage.getItem('zalams-user') || 'null');
+  if (!user) {
+    // Redirect to login if not logged in
+    alert('Please log in to add items to your cart.');
+    window.location.href = 'login.html';
+    return;
+  }
+
   const product = products.find(p => p.id === productId);
   if (!product) return;
 
@@ -71,6 +105,12 @@ function getCartTotal() {
 // --- Get cart count ---
 function getCartCount() {
   return cart.reduce((sum, item) => sum + item.quantity, 0);
+}
+
+// --- Reload cart when user changes ---
+function reloadCart() {
+  cart = loadCart();
+  updateCartCount();
 }
 
 // --- Init: update count on page load ---

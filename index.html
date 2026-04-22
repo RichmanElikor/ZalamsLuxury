@@ -72,7 +72,33 @@
         <!-- Right Side Actions -->
         <div class="navbar__actions">
           <a href="#" class="search-link">Search</a>
-          <a href="#" class="account-link">Account</a>
+          <div class="account-dropdown">
+            <a href="login.html" class="account-link">Account</a>
+            <div class="account-dropdown__menu" id="account-menu">
+              <!-- Shown when NOT logged in -->
+              <div id="guest-menu">
+                <a href="login.html" class="account-dropdown__item">Login</a>
+                <a href="signup.html" class="account-dropdown__item">Sign Up</a>
+              </div>
+              <!-- Shown when logged in -->
+              <div id="user-menu" style="display:none">
+                <a href="javascript:void(0)"
+                  class="account-dropdown__item"
+                  onclick="window.location.href = getUser()?.role === 'admin' ? 'admin.html' : 'account.html'">
+                  My Account
+                </a>
+                <a href="javascript:void(0)"
+                  class="account-dropdown__item"
+                  onclick="window.location.href = getUser()?.role === 'admin' ? 'admin.html' : 'account.html#orders'">
+                  My Orders
+                </a>
+                <button class="account-dropdown__item logout" onclick="handleLogout()">
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+
           <a href="cart.html">
             Cart
             <span class="cart-count" id="cart-count">0</span>
@@ -328,5 +354,6 @@
   <script src="assets/js/main.js"></script>
   <script src="assets/js/cart.js"></script>
   <script src="assets/js/shop.js"></script>
+  <script src="assets/js/auth.js"></script>
 </body>
 </html>

@@ -5,12 +5,12 @@
 
 import express from 'express';
 import Order from '../models/Order.js';
+import { sendEmail, orderShippedEmail } from '../config/email.js';
 
 const router = express.Router();
 
 
 // --- POST /api/orders ---
-// Create a new order
 router.post('/', async (req, res) => {
   try {
     const {
@@ -25,7 +25,6 @@ router.post('/', async (req, res) => {
       paymentMethod
     } = req.body;
 
-    // Validation
     if (!customerName || !email || !phone || !address || !items || !total) {
       return res.status(400).json({
         success: false,
@@ -62,7 +61,6 @@ router.post('/', async (req, res) => {
 
 
 // --- GET /api/orders ---
-// Get all orders (admin only later)
 router.get('/', async (req, res) => {
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
@@ -83,8 +81,31 @@ router.get('/', async (req, res) => {
 });
 
 
+// --- GET /api/orders/customer/:email ---
+// MUST be before /:id
+router.get('/customer/:email', async (req, res) => {
+  try {
+    const orders = await Order.find({
+      email: req.params.email
+    }).sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      count: orders.length,
+      orders
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Could not load orders',
+      error: error.message
+    });
+  }
+});
+
+
 // --- GET /api/orders/:id ---
-// Get single order by ID
 router.get('/:id', async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -111,32 +132,7 @@ router.get('/:id', async (req, res) => {
 });
 
 
-// --- GET /api/orders/customer/:email ---
-// Get all orders for a specific customer
-router.get('/customer/:email', async (req, res) => {
-  try {
-    const orders = await Order.find({
-      email: req.params.email
-    }).sort({ createdAt: -1 });
-
-    res.json({
-      success: true,
-      count: orders.length,
-      orders
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Could not load orders',
-      error: error.message
-    });
-  }
-});
-
-
 // --- PATCH /api/orders/:id/status ---
-// Update order status (admin only later)
 router.patch('/:id/status', async (req, res) => {
   try {
     const { status } = req.body;
@@ -152,6 +148,11 @@ router.patch('/:id/status', async (req, res) => {
         success: false,
         message: 'Order not found'
       });
+    }
+
+    // Send shipped email to customer
+    if (status === 'shipped') {
+      sendEmail(orderShippedEmail(order));
     }
 
     res.json({

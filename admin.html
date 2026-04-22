@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Zalams Luxury</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/admin.css" />
+</head>
+<body>
+
+  <!-- ADMIN SIDEBAR -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="admin-sidebar__logo">
+      <a href="index.html">ZALAM<span>S</span></a>
+      <span class="admin-badge">Admin</span>
+    </div>
+
+    <nav class="admin-nav">
+      <button class="admin-nav__item active" data-tab="dashboard">
+        <span class="admin-nav__icon">📊</span>
+        Dashboard
+      </button>
+      <button class="admin-nav__item" data-tab="orders">
+        <span class="admin-nav__icon">📦</span>
+        Orders
+      </button>
+      <button class="admin-nav__item" data-tab="products">
+        <span class="admin-nav__icon">🛍️</span>
+        Products
+      </button>
+      <button class="admin-nav__item" data-tab="messages">
+        <span class="admin-nav__icon">💬</span>
+        Messages
+      </button>
+      <button class="admin-nav__item" data-tab="users">
+        <span class="admin-nav__icon">👥</span>
+        Users
+      </button>
+    </nav>
+
+    <div class="admin-sidebar__footer">
+      <p class="admin-user" id="admin-user-name">Admin</p>
+      <button class="admin-logout" onclick="handleLogout()">Logout</button>
+    </div>
+  </aside>
+
+
+  <!-- ADMIN MAIN -->
+  <main class="admin-main">
+
+    <!-- Top Bar -->
+    <div class="admin-topbar">
+      <h1 class="admin-topbar__title" id="page-title">Dashboard</h1>
+      <p class="admin-topbar__date" id="current-date"></p>
+    </div>
+
+
+    <!-- ==============================
+         TAB: DASHBOARD
+    ============================== -->
+    <div class="admin-tab active" id="tab-dashboard">
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <p class="stat-card__label">Total Orders</p>
+          <p class="stat-card__value" id="stat-orders">0</p>
+          <p class="stat-card__sub">All time</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__label">Total Revenue</p>
+          <p class="stat-card__value" id="stat-revenue">₦0</p>
+          <p class="stat-card__sub">Paid orders only</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__label">Total Products</p>
+          <p class="stat-card__value" id="stat-products">0</p>
+          <p class="stat-card__sub">In catalog</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__label">Messages</p>
+          <p class="stat-card__value" id="stat-messages">0</p>
+          <p class="stat-card__sub">Unread</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__label">Registered Users</p>
+          <p class="stat-card__value" id="stat-users">0</p>
+          <p class="stat-card__sub">Total customers</p>
+        </div>
+      </div>
+
+      <!-- Recent Orders -->
+      <div class="admin-card">
+        <div class="admin-card__header">
+          <h2 class="admin-card__title">Recent Orders</h2>
+          <button class="admin-btn-ghost" onclick="switchTab('orders')">
+            View All
+          </button>
+        </div>
+        <div id="recent-orders-list">
+          <p class="admin-empty">Loading...</p>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ==============================
+         TAB: ORDERS
+    ============================== -->
+    <div class="admin-tab" id="tab-orders">
+
+      <div class="admin-card">
+        <div class="admin-card__header">
+          <h2 class="admin-card__title">All Orders</h2>
+          <select class="admin-select" id="order-filter" onchange="filterOrders()">
+            <option value="all">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div id="all-orders-list">
+          <p class="admin-empty">Loading...</p>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ==============================
+         TAB: PRODUCTS
+    ============================== -->
+    <div class="admin-tab" id="tab-products">
+
+      <!-- Add Product Form -->
+      <div class="admin-card">
+        <div class="admin-card__header">
+          <h2 class="admin-card__title" id="product-form-title">
+            Add New Product
+          </h2>
+          <button class="admin-btn-ghost" id="cancel-edit-btn"
+            onclick="cancelEdit()" style="display:none">
+            Cancel Edit
+          </button>
+        </div>
+
+        <div class="product-form">
+          <input type="hidden" id="edit-product-id" />
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Product Name</label>
+              <input type="text" class="form-input" id="p-name"
+                placeholder="e.g. Zalams Classic Tee" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Price (₦)</label>
+              <input type="number" class="form-input" id="p-price"
+                placeholder="e.g. 25000" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-input form-textarea" id="p-description"
+              placeholder="Product description..." rows="3"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select class="form-input" id="p-category">
+                <option value="">Select category</option>
+                <option value="men-tshirts">Men — T-Shirts</option>
+                <option value="men-outerwear">Men — Outerwear</option>
+                <option value="men-shirts">Men — Shirts</option>
+                <option value="men-pants">Men — Pants</option>
+                <option value="men-denim">Men — Denim</option>
+                <option value="women-tops">Women — Tops</option>
+                <option value="women-gowns">Women — Gowns</option>
+                <option value="women-skirts">Women — Skirts</option>
+                <option value="bags">Accessories — Bags</option>
+                <option value="hats">Accessories — Hats</option>
+                <option value="belts">Accessories — Belts</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tag</label>
+              <select class="form-input" id="p-tag">
+                <option value="New In">New In</option>
+                <option value="Sale">Sale</option>
+                <option value="Featured">Featured</option>
+                <option value="Limited">Limited Edition</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Image URL</label>
+              <input type="text" class="form-input" id="p-image"
+                placeholder="https://..." />
+            </div>
+            <div class="form-group">
+              <label class="form-label">In Stock</label>
+              <select class="form-input" id="p-instock">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Available Sizes</label>
+            <div class="sizes-check">
+              <label><input type="checkbox" value="XS" /> XS</label>
+              <label><input type="checkbox" value="S" /> S</label>
+              <label><input type="checkbox" value="M" /> M</label>
+              <label><input type="checkbox" value="L" /> L</label>
+              <label><input type="checkbox" value="XL" /> XL</label>
+              <label><input type="checkbox" value="XXL" /> XXL</label>
+            </div>
+          </div>
+
+          <p class="admin-form-error" id="product-form-error"></p>
+          <p class="admin-form-success" id="product-form-success"></p>
+
+          <button class="admin-btn-primary" id="save-product-btn"
+            onclick="saveProduct()">
+            Add Product
+          </button>
+        </div>
+      </div>
+
+      <!-- Products List -->
+      <div class="admin-card" style="margin-top: 24px;">
+        <div class="admin-card__header">
+          <h2 class="admin-card__title">All Products</h2>
+          <p class="admin-count" id="products-count">0 products</p>
+        </div>
+        <div id="products-list">
+          <p class="admin-empty">Loading...</p>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ==============================
+         TAB: MESSAGES
+    ============================== -->
+    <div class="admin-tab" id="tab-messages">
+
+      <div class="admin-card">
+        <div class="admin-card__header">
+          <h2 class="admin-card__title">Customer Messages</h2>
+          <p class="admin-count" id="messages-count">0 messages</p>
+        </div>
+        <div id="messages-list">
+          <p class="admin-empty">Loading...</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==============================
+     TAB: USERS
+    ============================== -->
+    <div class="admin-tab" id="tab-users">
+      <div class="admin-card">
+        <div class="admin-card__header">
+          <h2 class="admin-card__title">Registered Users</h2>
+          <p class="admin-count" id="users-count">0 users</p>
+        </div>
+        <div id="users-list">
+          <p class="admin-empty">Loading...</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>
