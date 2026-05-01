@@ -101,3 +101,96 @@ function subscribeNewsletter() {
     </p>
   `;
 }
+
+// --- Search ---
+const searchLink = document.querySelector('.search-link');
+if (searchLink) {
+  searchLink.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    // Create search overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'search-overlay';
+    overlay.style.cssText = `
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(245,245,243,0.98);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-start;
+      padding-top: 120px;
+    `;
+
+    overlay.innerHTML = `
+      <div style="width:100%;max-width:600px;padding:0 24px;">
+        <div style="display:flex;align-items:center;
+          border-bottom:2px solid #111;margin-bottom:32px;">
+          <input id="search-input" type="text"
+            placeholder="Search products..."
+            style="flex:1;padding:16px 0;font-size:1.2rem;
+            border:none;background:transparent;outline:none;
+            font-family:Inter,sans-serif;color:#111;" />
+          <button onclick="document.getElementById('search-overlay').remove()"
+            style="background:none;border:none;font-size:1.5rem;
+            cursor:pointer;color:#888;padding:8px;">✕</button>
+        </div>
+        <div id="search-results"></div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    const input = document.getElementById('search-input');
+    input.focus();
+
+    input.addEventListener('input', () => {
+      const query = input.value.toLowerCase().trim();
+      const results = document.getElementById('search-results');
+
+      if (!query) {
+        results.innerHTML = '';
+        return;
+      }
+
+      const matches = products.filter(p =>
+        p.name.toLowerCase().includes(query) ||
+        p.category.toLowerCase().includes(query)
+      );
+
+      if (matches.length === 0) {
+        results.innerHTML = `
+          <p style="color:#888;font-size:0.85rem;
+            letter-spacing:0.1em;text-transform:uppercase;">
+            No products found for "${query}"
+          </p>
+        `;
+        return;
+      }
+
+      results.innerHTML = matches.map(p => `
+        <a href="product.html?id=${p.id}"
+          style="display:flex;gap:16px;align-items:center;
+          padding:12px 0;border-bottom:1px solid #e8e8e4;
+          text-decoration:none;color:#111;
+          transition:padding-left 0.2s ease;"
+          onmouseover="this.style.paddingLeft='8px'"
+          onmouseout="this.style.paddingLeft='0'">
+          <img src="${p.image}" alt="${p.name}"
+            style="width:50px;height:60px;object-fit:cover;
+            background:#f0f0ec;" />
+          <div>
+            <p style="font-size:0.85rem;font-weight:600;
+              margin:0 0 4px;">${p.name}</p>
+            <p style="font-size:0.82rem;color:#c9a84c;
+              font-weight:700;margin:0;">
+              ₦${p.price.toLocaleString('en-NG')}
+            </p>
+          </div>
+        </a>
+      `).join('');
+    });
+
+    // Close on escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') overlay.remove();
+    });
+  });
+}

@@ -2,10 +2,10 @@
    ZALAMS LUXURY — SERVER
    src/server.js
 ================================ */
-
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import connectDB from './config/database.js';
@@ -16,6 +16,9 @@ import ordersRouter from './routes/orders.js';
 import contactRouter from './routes/contact.js';
 import paymentRouter from './routes/payment.js';
 import authRouter from './routes/auth.js';
+import uploadRouter from './routes/upload.js';
+import flutterwaveRouter from './routes/flutterwave.js';
+
 
 // --- Setup ---
 dotenv.config();
@@ -49,8 +52,10 @@ app.use(express.static(path.join(__dirname, '..')));
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/contact', contactRouter);
-app.use('/api/payment', paymentRouter);
+app.use('/api/payment', paymentRouter); 
 app.use('/api/auth', authRouter);
+app.use('/api/products/upload', uploadRouter);
+
 
 // --- Health Check ---
 app.get('/api/health', (req, res) => {

@@ -6,7 +6,6 @@
 import mongoose from 'mongoose';
 
 const orderSchema = new mongoose.Schema({
-  // Customer Info
   customerName: {
     type: String,
     required: [true, 'Customer name is required'],
@@ -22,62 +21,45 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Phone number is required']
   },
-
-  // Delivery Address
   address: {
-    street: { type: String, required: true },
-    city:   { type: String, required: true },
-    state:  { type: String, required: true }
+    street: { type: String },
+    city:   { type: String },
+    state:  { type: String }
   },
-
-  // Order Items
   items: [{
-productId: { type: mongoose.Schema.Types.Mixed },    name:        { type: String, required: true },
-    price:       { type: Number, required: true },
-    quantity:    { type: Number, required: true, min: 1 },
-    size:        { type: String },
-    color:       { type: String },
-    image:       { type: String }
+    productId: { type: mongoose.Schema.Types.Mixed },
+    name:      { type: String, required: true },
+    price:     { type: Number, required: true },
+    quantity:  { type: Number, required: true, min: 1 },
+    size:      { type: String },
+    color:     { type: String },
+    image:     { type: String }
   }],
-
-  // Pricing
-  subtotal:      { type: Number, required: true },
-  deliveryFee:   { type: Number, default: 0 },
-  total:         { type: Number, required: true },
-
-  // Payment
+  subtotal:         { type: Number, required: true },
+  deliveryFee:      { type: Number, default: 0 },
+  total:            { type: Number, required: true },
   paymentMethod: {
     type: String,
-    enum: ['stripe', 'paystack', 'pay_on_delivery'],
-    default: 'stripe'
+    enum: ['stripe', 'paystack', 'flutterwave', 'pay_on_delivery'],
+    default: 'flutterwave'
   },
   paymentStatus: {
     type: String,
     enum: ['pending', 'paid', 'failed', 'refunded'],
     default: 'pending'
   },
-  stripeSessionId: {
-    type: String
-  },
-
-  // Order Status
+  stripeSessionId:  { type: String },
+  flutterwaveTxRef: { type: String },
   status: {
     type: String,
     enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'],
     default: 'pending'
   },
-
-  // Tracking
-  trackingNumber: {
-    type: String
-  },
-  notes: {
-    type: String
-  }
+  trackingNumber: { type: String },
+  notes:          { type: String }
 }, {
   timestamps: true
 });
 
 const Order = mongoose.model('Order', orderSchema);
-
 export default Order;

@@ -330,6 +330,15 @@ async function init() {
 
   // Product detail page
   initProductPage();
+  // Auto refresh products every 30 seconds
+  setInterval(async () => {
+    await fetchProducts();
+    const newInGrid = document.getElementById('new-in-grid');
+    const exploreGrid = document.getElementById('explore-grid');
+    if (newInGrid) renderProducts('new-in-grid', products.slice(0, 8));
+    if (exploreGrid) renderProducts('explore-grid', products.slice(4, 8));
+    initShopPage();
+  }, 30000);
 }
 
 init();

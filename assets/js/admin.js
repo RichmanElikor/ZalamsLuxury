@@ -13,18 +13,17 @@ if (!adminToken || !adminUser || adminUser.role !== 'admin') {
 }
 
 // --- Set admin name ---
-document.getElementById('admin-user-name').textContent =
-  adminUser.name || 'Admin';
+const adminNameEl = document.getElementById('admin-user-name');
+if (adminNameEl) adminNameEl.textContent = adminUser.name || 'Admin';
 
 // --- Set current date ---
-document.getElementById('current-date').textContent =
-  new Date().toLocaleDateString('en-NG', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+const dateEl = document.getElementById('current-date');
+if (dateEl) {
+  dateEl.textContent = new Date().toLocaleDateString('en-NG', {
+    weekday: 'long', year: 'numeric',
+    month: 'long', day: 'numeric'
   });
-
+}
 
 // --- Auth headers ---
 const authHeaders = {
@@ -42,22 +41,26 @@ function switchTab(tabName) {
   document.querySelectorAll('.admin-nav__item')
     .forEach(n => n.classList.remove('active'));
 
-  document.getElementById(`tab-${tabName}`).classList.add('active');
-  document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+  const tab = document.getElementById(`tab-${tabName}`);
+  const nav = document.querySelector(`[data-tab="${tabName}"]`);
 
-  document.getElementById('page-title').textContent =
-    tabName.charAt(0).toUpperCase() + tabName.slice(1);
+  if (tab) tab.classList.add('active');
+  if (nav) nav.classList.add('active');
+
+  const titleEl = document.getElementById('page-title');
+  if (titleEl) {
+    titleEl.textContent =
+      tabName.charAt(0).toUpperCase() + tabName.slice(1);
+  }
 }
 
 document.querySelectorAll('.admin-nav__item').forEach(item => {
-  item.addEventListener('click', () => {
-    switchTab(item.dataset.tab);
-  });
+  item.addEventListener('click', () => switchTab(item.dataset.tab));
 });
 
 
 // ================================
-// DASHBOARD STATS
+// DASHBOARD
 // ================================
 async function loadDashboard() {
   try {
@@ -71,7 +74,6 @@ async function loadDashboard() {
     const productsData = await productsRes.json();
     const messagesData = await messagesRes.json();
 
-    // Stats
     const orders = ordersData.orders || [];
     const products = productsData.products || [];
     const messages = messagesData.messages || [];
@@ -80,16 +82,17 @@ async function loadDashboard() {
       .filter(o => o.paymentStatus === 'paid')
       .reduce((sum, o) => sum + o.total, 0);
 
-    document.getElementById('stat-orders').textContent = orders.length;
-    document.getElementById('stat-revenue').textContent =
-      '₦' + revenue.toLocaleString('en-NG');
-    document.getElementById('stat-products').textContent = products.length;
-    document.getElementById('stat-messages').textContent =
-      messages.filter(m => !m.read).length;
+    const statOrders = document.getElementById('stat-orders');
+    const statRevenue = document.getElementById('stat-revenue');
+    const statProducts = document.getElementById('stat-products');
+    const statMessages = document.getElementById('stat-messages');
 
-    // Recent orders (last 5)
-    const recentOrders = orders.slice(0, 5);
-    renderRecentOrders(recentOrders);
+    if (statOrders) statOrders.textContent = orders.length;
+    if (statRevenue) statRevenue.textContent = '₦' + revenue.toLocaleString('en-NG');
+    if (statProducts) statProducts.textContent = products.length;
+    if (statMessages) statMessages.textContent = messages.filter(m => !m.read).length;
+
+    renderRecentOrders(orders.slice(0, 5));
 
   } catch (error) {
     console.error('Dashboard error:', error);
@@ -98,6 +101,7 @@ async function loadDashboard() {
 
 function renderRecentOrders(orders) {
   const container = document.getElementById('recent-orders-list');
+  if (!container) return;
 
   if (orders.length === 0) {
     container.innerHTML = '<p class="admin-empty">No orders yet</p>';
@@ -122,7 +126,8 @@ function renderRecentOrders(orders) {
             <td style="color:#c9a84c">
               #${order._id.slice(-8).toUpperCase()}
             </td>
-            <td>${order.customerName}<br/>
+            <td>
+              ${order.customerName}<br/>
               <span style="font-size:0.7rem;color:#888">
                 ${order.email}
               </span>
@@ -138,7 +143,9 @@ function renderRecentOrders(orders) {
                 ${order.status}
               </span>
             </td>
-            <td>${new Date(order.createdAt).toLocaleDateString('en-NG')}</td>
+            <td>
+              ${new Date(order.createdAt).toLocaleDateString('en-NG')}
+            </td>
           </tr>
         `).join('')}
       </tbody>
@@ -161,13 +168,14 @@ async function loadOrders() {
     allOrders = data.orders || [];
     renderOrders(allOrders);
   } catch (error) {
-    document.getElementById('all-orders-list').innerHTML =
+    const container = document.getElementById('all-orders-list');
+    if (container) container.innerHTML =
       '<p class="admin-empty">Could not load orders</p>';
   }
 }
 
 function filterOrders() {
-  const filter = document.getElementById('order-filter').value;
+  const filter = document.getElementById('order-filter')?.value;
   const filtered = filter === 'all'
     ? allOrders
     : allOrders.filter(o => o.status === filter);
@@ -176,6 +184,7 @@ function filterOrders() {
 
 function renderOrders(orders) {
   const container = document.getElementById('all-orders-list');
+  if (!container) return;
 
   if (orders.length === 0) {
     container.innerHTML = '<p class="admin-empty">No orders found</p>';
@@ -192,7 +201,7 @@ function renderOrders(orders) {
           <th>Total</th>
           <th>Payment</th>
           <th>Status</th>
-          <th>Update Status</th>
+          <th>Update</th>
         </tr>
       </thead>
       <tbody>
@@ -205,12 +214,23 @@ function renderOrders(orders) {
               ${order.customerName}<br/>
               <span style="font-size:0.7rem;color:#888">
                 ${order.email}
-              </span><br/>
-              <span style="font-size:0.7rem;color:#888">
-                ${order.phone || ''}
               </span>
             </td>
-            <td>${order.items.length} item(s)</td>
+            <td>
+              ${order.items.map(item => `
+                <div style="margin-bottom:4px;">
+                  <span style="color:#fff;font-size:0.78rem;">
+                    ${item.name}
+                  </span>
+                  <span style="color:#888;font-size:0.72rem;">
+                    × ${item.quantity}
+                  </span>
+                  <span style="color:#c9a84c;font-size:0.72rem;">
+                    ₦${(item.price * item.quantity).toLocaleString('en-NG')}
+                  </span>
+                </div>
+              `).join('')}
+            </td>
             <td>₦${order.total.toLocaleString('en-NG')}</td>
             <td>
               <span class="order-status ${order.paymentStatus}">
@@ -227,25 +247,15 @@ function renderOrders(orders) {
                 onchange="updateOrderStatus('${order._id}', this.value)"
                 style="font-size:0.72rem;padding:4px 8px">
                 <option value="pending"
-                  ${order.status === 'pending' ? 'selected' : ''}>
-                  Pending
-                </option>
+                  ${order.status==='pending'?'selected':''}>Pending</option>
                 <option value="processing"
-                  ${order.status === 'processing' ? 'selected' : ''}>
-                  Processing
-                </option>
+                  ${order.status==='processing'?'selected':''}>Processing</option>
                 <option value="shipped"
-                  ${order.status === 'shipped' ? 'selected' : ''}>
-                  Shipped
-                </option>
+                  ${order.status==='shipped'?'selected':''}>Shipped</option>
                 <option value="delivered"
-                  ${order.status === 'delivered' ? 'selected' : ''}>
-                  Delivered
-                </option>
+                  ${order.status==='delivered'?'selected':''}>Delivered</option>
                 <option value="cancelled"
-                  ${order.status === 'cancelled' ? 'selected' : ''}>
-                  Cancelled
-                </option>
+                  ${order.status==='cancelled'?'selected':''}>Cancelled</option>
               </select>
             </td>
           </tr>
@@ -257,19 +267,13 @@ function renderOrders(orders) {
 
 async function updateOrderStatus(orderId, status) {
   try {
-    const response = await fetch(
-      `${ADMIN_API}/orders/${orderId}/status`,
-      {
-        method: 'PATCH',
-        headers: authHeaders,
-        body: JSON.stringify({ status })
-      }
-    );
-    const data = await response.json();
-    if (data.success) {
-      loadOrders();
-      loadDashboard();
-    }
+    await fetch(`${ADMIN_API}/orders/${orderId}/status`, {
+      method: 'PATCH',
+      headers: authHeaders,
+      body: JSON.stringify({ status })
+    });
+    loadOrders();
+    loadDashboard();
   } catch (error) {
     console.error('Update status error:', error);
   }
@@ -279,6 +283,7 @@ async function updateOrderStatus(orderId, status) {
 // ================================
 // PRODUCTS
 // ================================
+let allProducts = [];
 let editingProductId = null;
 
 async function loadProducts() {
@@ -287,20 +292,21 @@ async function loadProducts() {
       headers: authHeaders
     });
     const data = await response.json();
-    const products = data.products || [];
+    allProducts = data.products || [];
 
-    document.getElementById('products-count').textContent =
-      `${products.length} products`;
+    const countEl = document.getElementById('products-count');
+    if (countEl) countEl.textContent = `${allProducts.length} products`;
 
     const container = document.getElementById('products-list');
+    if (!container) return;
 
-    if (products.length === 0) {
+    if (allProducts.length === 0) {
       container.innerHTML =
         '<p class="admin-empty">No products yet. Add your first product above!</p>';
       return;
     }
 
-    container.innerHTML = products.map(product => `
+    container.innerHTML = allProducts.map(product => `
       <div class="product-row">
         <img class="product-row__img"
           src="${product.images?.[0] || product.image || ''}"
@@ -319,7 +325,7 @@ async function loadProducts() {
         </div>
         <div class="product-row__actions">
           <button class="admin-btn-edit"
-            onclick="editProduct(${JSON.stringify(product).replace(/"/g, '&quot;')})">
+            onclick="editProductById('${product._id}')">
             Edit
           </button>
           <button class="admin-btn-danger"
@@ -331,19 +337,95 @@ async function loadProducts() {
     `).join('');
 
   } catch (error) {
-    document.getElementById('products-list').innerHTML =
+    const container = document.getElementById('products-list');
+    if (container) container.innerHTML =
       '<p class="admin-empty">Could not load products</p>';
   }
 }
 
+function editProductById(productId) {
+  const product = allProducts.find(p => p._id === productId);
+  if (product) editProduct(product);
+}
+
+function editProduct(product) {
+  editingProductId = product._id;
+
+  const name = document.getElementById('p-name');
+  const price = document.getElementById('p-price');
+  const desc = document.getElementById('p-description');
+  const cat = document.getElementById('p-category');
+  const tag = document.getElementById('p-tag');
+  const img = document.getElementById('p-image');
+  const imgUrl = document.getElementById('p-image-url');
+  const instock = document.getElementById('p-instock');
+
+  if (name) name.value = product.name;
+  if (price) price.value = product.price;
+  if (desc) desc.value = product.description;
+  if (cat) cat.value = product.category;
+  if (tag) tag.value = product.tag || 'New In';
+  if (img) img.value = product.images?.[0] || product.image || '';
+  if (imgUrl) imgUrl.value = product.images?.[0] || product.image || '';
+  if (instock) instock.value = product.inStock ? 'true' : 'false';
+
+  document.querySelectorAll('.sizes-check input').forEach(cb => {
+    cb.checked = product.sizes?.includes(cb.value);
+  });
+
+  const titleEl = document.getElementById('product-form-title');
+  const saveBtn = document.getElementById('save-product-btn');
+  const cancelBtn = document.getElementById('cancel-edit-btn');
+
+  if (titleEl) titleEl.textContent = 'Edit Product';
+  if (saveBtn) saveBtn.textContent = 'Update Product';
+  if (cancelBtn) cancelBtn.style.display = 'block';
+
+  document.querySelector('.admin-card')?.scrollIntoView({ behavior: 'smooth' });
+}
+
+function cancelEdit() {
+  clearProductForm();
+}
+
+function clearProductForm() {
+  editingProductId = null;
+
+  const fields = ['p-name', 'p-price', 'p-description',
+    'p-image', 'p-image-url'];
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  const cat = document.getElementById('p-category');
+  const tag = document.getElementById('p-tag');
+  const instock = document.getElementById('p-instock');
+  if (cat) cat.value = '';
+  if (tag) tag.value = 'New In';
+  if (instock) instock.value = 'true';
+
+  document.querySelectorAll('.sizes-check input')
+    .forEach(cb => cb.checked = false);
+
+  const titleEl = document.getElementById('product-form-title');
+  const saveBtn = document.getElementById('save-product-btn');
+  const cancelBtn = document.getElementById('cancel-edit-btn');
+
+  if (titleEl) titleEl.textContent = 'Add New Product';
+  if (saveBtn) saveBtn.textContent = 'Add Product';
+  if (cancelBtn) cancelBtn.style.display = 'none';
+}
+
 async function saveProduct() {
-  const name = document.getElementById('p-name').value.trim();
-  const price = document.getElementById('p-price').value;
-  const description = document.getElementById('p-description').value.trim();
-  const category = document.getElementById('p-category').value;
-  const tag = document.getElementById('p-tag').value;
-  const image = document.getElementById('p-image').value.trim();
-  const inStock = document.getElementById('p-instock').value === 'true';
+  const name = document.getElementById('p-name')?.value.trim();
+  const price = document.getElementById('p-price')?.value;
+  const description = document.getElementById('p-description')?.value.trim();
+  const category = document.getElementById('p-category')?.value;
+  const tag = document.getElementById('p-tag')?.value;
+  const image = document.getElementById('p-image')?.value.trim() ||
+    document.getElementById('p-image-url')?.value.trim();
+  const inStock = document.getElementById('p-instock')?.value === 'true';
   const errorEl = document.getElementById('product-form-error');
   const successEl = document.getElementById('product-form-success');
 
@@ -351,30 +433,24 @@ async function saveProduct() {
     document.querySelectorAll('.sizes-check input:checked')
   ).map(cb => cb.value);
 
-  errorEl.textContent = '';
-  successEl.textContent = '';
+  if (errorEl) errorEl.textContent = '';
+  if (successEl) successEl.textContent = '';
 
   if (!name || !price || !description || !category || !image) {
-    errorEl.textContent = 'Please fill in all required fields.';
+    if (errorEl) errorEl.textContent = 'Please fill in all required fields.';
     return;
   }
 
   const productData = {
-    name,
-    price: parseInt(price),
-    description,
-    category,
-    tag,
-    images: [image],
-    sizes,
-    inStock
+    name, price: parseInt(price),
+    description, category, tag,
+    images: [image], sizes, inStock
   };
 
   try {
     const url = editingProductId
       ? `${ADMIN_API}/products/${editingProductId}`
       : `${ADMIN_API}/products`;
-
     const method = editingProductId ? 'PUT' : 'POST';
 
     const response = await fetch(url, {
@@ -386,83 +462,33 @@ async function saveProduct() {
     const data = await response.json();
 
     if (data.success) {
-      successEl.textContent = editingProductId
-        ? '✓ Product updated successfully!'
-        : '✓ Product added successfully!';
+      if (successEl) {
+        successEl.textContent = editingProductId
+          ? '✓ Product updated!'
+          : '✓ Product added!';
+        setTimeout(() => successEl.textContent = '', 3000);
+      }
       clearProductForm();
       loadProducts();
       loadDashboard();
-      setTimeout(() => successEl.textContent = '', 3000);
     } else {
-      errorEl.textContent = data.message || 'Could not save product';
+      if (errorEl) errorEl.textContent = data.message || 'Could not save';
     }
 
   } catch (error) {
-    errorEl.textContent = 'Something went wrong. Please try again.';
+    if (errorEl) errorEl.textContent = 'Something went wrong.';
   }
 }
 
-function editProduct(product) {
-  editingProductId = product._id;
-  document.getElementById('p-name').value = product.name;
-  document.getElementById('p-price').value = product.price;
-  document.getElementById('p-description').value = product.description;
-  document.getElementById('p-category').value = product.category;
-  document.getElementById('p-tag').value = product.tag || 'New In';
-  document.getElementById('p-image').value =
-    product.images?.[0] || product.image || '';
-  document.getElementById('p-instock').value =
-    product.inStock ? 'true' : 'false';
-
-  // Check sizes
-  document.querySelectorAll('.sizes-check input').forEach(cb => {
-    cb.checked = product.sizes?.includes(cb.value);
-  });
-
-  document.getElementById('product-form-title').textContent = 'Edit Product';
-  document.getElementById('save-product-btn').textContent = 'Update Product';
-  document.getElementById('cancel-edit-btn').style.display = 'block';
-
-  // Scroll to form
-  document.querySelector('.admin-card').scrollIntoView({ behavior: 'smooth' });
-}
-
-function cancelEdit() {
-  clearProductForm();
-}
-
-function clearProductForm() {
-  editingProductId = null;
-  document.getElementById('p-name').value = '';
-  document.getElementById('p-price').value = '';
-  document.getElementById('p-description').value = '';
-  document.getElementById('p-category').value = '';
-  document.getElementById('p-tag').value = 'New In';
-  document.getElementById('p-image').value = '';
-  document.getElementById('p-instock').value = 'true';
-  document.querySelectorAll('.sizes-check input').forEach(cb => {
-    cb.checked = false;
-  });
-  document.getElementById('product-form-title').textContent = 'Add New Product';
-  document.getElementById('save-product-btn').textContent = 'Add Product';
-  document.getElementById('cancel-edit-btn').style.display = 'none';
-}
-
 async function deleteProduct(productId) {
-  if (!confirm('Are you sure you want to delete this product?')) return;
-
+  if (!confirm('Delete this product?')) return;
   try {
-    const response = await fetch(`${ADMIN_API}/products/${productId}`, {
+    await fetch(`${ADMIN_API}/products/${productId}`, {
       method: 'DELETE',
       headers: authHeaders
     });
-
-    const data = await response.json();
-
-    if (data.success) {
-      loadProducts();
-      loadDashboard();
-    }
+    loadProducts();
+    loadDashboard();
   } catch (error) {
     console.error('Delete error:', error);
   }
@@ -480,14 +506,14 @@ async function loadMessages() {
     const data = await response.json();
     const messages = data.messages || [];
 
-    document.getElementById('messages-count').textContent =
-      `${messages.length} messages`;
+    const countEl = document.getElementById('messages-count');
+    if (countEl) countEl.textContent = `${messages.length} messages`;
 
     const container = document.getElementById('messages-list');
+    if (!container) return;
 
     if (messages.length === 0) {
-      container.innerHTML =
-        '<p class="admin-empty">No messages yet</p>';
+      container.innerHTML = '<p class="admin-empty">No messages yet</p>';
       return;
     }
 
@@ -502,9 +528,7 @@ async function loadMessages() {
           </div>
           <p class="message-card__date">
             ${new Date(msg.createdAt).toLocaleDateString('en-NG', {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric'
+              year: 'numeric', month: 'short', day: 'numeric'
             })}
           </p>
         </div>
@@ -516,10 +540,12 @@ async function loadMessages() {
     `).join('');
 
   } catch (error) {
-    document.getElementById('messages-list').innerHTML =
+    const container = document.getElementById('messages-list');
+    if (container) container.innerHTML =
       '<p class="admin-empty">Could not load messages</p>';
   }
 }
+
 
 // ================================
 // USERS
@@ -532,14 +558,14 @@ async function loadUsers() {
     const data = await response.json();
     const users = data.users || [];
 
-    document.getElementById('users-count').textContent =
-      `${users.length} users`;
+    const countEl = document.getElementById('users-count');
+    if (countEl) countEl.textContent = `${users.length} users`;
 
-    // Update dashboard stat
-    const statUsers = document.getElementById('stat-users');
-    if (statUsers) statUsers.textContent = users.length;
+    const statEl = document.getElementById('stat-users');
+    if (statEl) statEl.textContent = users.length;
 
     const container = document.getElementById('users-list');
+    if (!container) return;
 
     if (users.length === 0) {
       container.innerHTML =
@@ -553,21 +579,25 @@ async function loadUsers() {
           <tr>
             <th>Name</th>
             <th>Email</th>
+            <th>Role</th>
             <th>Joined</th>
-            <th>Orders</th>
           </tr>
         </thead>
         <tbody>
           ${users.map(user => `
             <tr>
-              <td style="color:#fff;">${user.name}</td>
-              <td style="color:#c9a84c;">${user.email}</td>
-              <td>${new Date(user.createdAt).toLocaleDateString('en-NG', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-              })}</td>
-              <td>${user.orderHistory?.length || 0}</td>
+              <td style="color:#fff">${user.name}</td>
+              <td style="color:#c9a84c">${user.email}</td>
+              <td>
+                <span class="order-status ${user.role}">
+                  ${user.role}
+                </span>
+              </td>
+              <td>
+                ${new Date(user.createdAt).toLocaleDateString('en-NG', {
+                  year: 'numeric', month: 'short', day: 'numeric'
+                })}
+              </td>
             </tr>
           `).join('')}
         </tbody>
@@ -575,13 +605,61 @@ async function loadUsers() {
     `;
 
   } catch (error) {
-    document.getElementById('users-list').innerHTML =
+    const container = document.getElementById('users-list');
+    if (container) container.innerHTML =
       '<p class="admin-empty">Could not load users</p>';
   }
 }
 
+
 // ================================
-// INIT — Load all data
+// IMAGE UPLOAD
+// ================================
+async function previewImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const preview = document.getElementById('image-preview');
+  const placeholder = document.getElementById('image-placeholder');
+  const reader = new FileReader();
+
+  reader.onload = (e) => {
+    if (preview) {
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+    }
+    if (placeholder) placeholder.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+
+  const formData = new FormData();
+  formData.append('image', file);
+
+  try {
+    const response = await fetch(`${ADMIN_API}/products/upload`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${adminToken}` },
+      body: formData
+    });
+    const data = await response.json();
+    if (data.success) {
+      const imgInput = document.getElementById('p-image');
+      const urlInput = document.getElementById('p-image-url');
+      if (imgInput) imgInput.value = data.imageUrl;
+      if (urlInput) urlInput.value = data.imageUrl;
+    }
+  } catch (error) {
+    console.error('Upload error:', error);
+    if (preview) {
+      const imgInput = document.getElementById('p-image');
+      if (imgInput) imgInput.value = preview.src;
+    }
+  }
+}
+
+
+// ================================
+// INIT
 // ================================
 loadDashboard();
 loadOrders();

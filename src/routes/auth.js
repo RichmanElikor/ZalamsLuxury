@@ -241,28 +241,47 @@ router.put('/update-profile', async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-      return res.status(401).json({ success: false, message: 'Not logged in' });
+      return res.status(401).json({
+        success: false,
+        message: 'Not logged in'
+      });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const { name, address } = req.body;
+    const { name, address, phone } = req.body;
+
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (phone) updateData.phone = phone;
+    if (address) updateData.address = address;
 
     const user = await User.findByIdAndUpdate(
       decoded.userId,
-      { name, address },
-      { new: true, runValidators: true }
+      { $set: updateData },
+      { new: true, runValidators: false }
     );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    // Update localStorage data
+    const userData = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      phone: user.phone,
+      address: user.address
+    };
 
     res.json({
       success: true,
       message: 'Profile updated successfully',
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        address: user.address
-      }
+      user: userData
     });
 
   } catch (error) {

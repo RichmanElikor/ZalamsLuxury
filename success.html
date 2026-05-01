@@ -272,39 +272,54 @@
   <script src="assets/js/main.js"></script>
   <script src="assets/js/shop.js"></script>
   <script src="assets/js/cart.js"></script>
+  <script src="assets/js/auth.js"></script>
   <script>
-    // Verify payment and show order details
     async function verifyPayment() {
       const params = new URLSearchParams(window.location.search);
-      const sessionId = params.get('session_id');
+      const orderId = params.get('order_id');
+      const status = params.get('status');
+      const transactionId = params.get('transaction_id');
+      const orderIdEl = document.getElementById('order-id');
 
-      if (!sessionId) {
-        document.getElementById('order-id').textContent =
-          'No session found.';
+      if (!orderId) {
+        if (orderIdEl) orderIdEl.textContent = 'No payment reference found.';
+        return;
+      }
+
+      if (status === 'cancelled') {
+        if (orderIdEl) orderIdEl.textContent = 'Payment was cancelled.';
+        setTimeout(() => window.location.href = 'cart.html', 2000);
         return;
       }
 
       try {
-        const response = await fetch(`/api/payment/verify/${sessionId}`);
+        let url = `/api/flutterwave/verify?order_id=${orderId}&status=${status}`;
+        if (transactionId) url += `&transaction_id=${transactionId}`;
+
+        const response = await fetch(url);
         const data = await response.json();
 
         if (data.success && data.paid) {
-          document.getElementById('order-id').textContent =
-            `Order ID: ${data.order._id}`;
-
-          // Clear cart after successful payment
-          clearEntireCart();
+          if (orderIdEl && data.order) {
+            orderIdEl.textContent =
+              `Order ID: #${data.order._id.slice(-8).toUpperCase()}`;
+          }
+          if (typeof clearEntireCart === 'function') clearEntireCart();
         } else {
-          document.getElementById('order-id').textContent =
-            'Payment verification pending...';
+          if (orderIdEl) {
+            orderIdEl.textContent = 'Payment verification pending...';
+          }
         }
       } catch (error) {
-        document.getElementById('order-id').textContent =
-          'Could not verify payment.';
+        console.error('Verify error:', error);
+        if (orderIdEl) {
+          orderIdEl.textContent = 'Could not verify payment.';
+        }
       }
     }
 
     verifyPayment();
+  </script>
   </script>
   <script src="assets/js/auth.js"></script>
 </body>

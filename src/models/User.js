@@ -30,11 +30,14 @@ const userSchema = new mongoose.Schema({
     enum: ['customer', 'admin'],
     default: 'customer'
   },
+  phone: {
+    type: String,
+    default: ''
+  },
   address: {
-    street: { type: String },
-    city:   { type: String },
-    state:  { type: String },
-    phone:  { type: String }
+    street: { type: String, default: '' },
+    city:   { type: String, default: '' },
+    state:  { type: String, default: '' }
   },
   orderHistory: [{
     type: mongoose.Schema.Types.ObjectId,

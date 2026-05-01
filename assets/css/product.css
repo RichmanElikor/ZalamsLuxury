@@ -202,7 +202,7 @@
 .size-btn.active {
   background-color: var(--color-white);
   border-color: var(--color-white);
-  color: #000;
+  color: var(--color-gold);
 }
 
 .size-btn.unavailable {
@@ -278,7 +278,7 @@
   padding: 16px;
   background-color: var(--color-white);
   border: 1px solid var(--color-white);
-  color: #000;
+  color: #b5b5b5;
   font-family: var(--font-body);
   font-size: 0.82rem;
   font-weight: 700;

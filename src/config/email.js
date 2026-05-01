@@ -234,13 +234,14 @@ export function newOrderAlertEmail(order) {
   return {
     from: process.env.EMAIL_FROM,
     to: process.env.ADMIN_EMAIL,
-    subject: `New Order — ₦${order.total.toLocaleString('en-NG')} from ${order.customerName}`,
+    subject: `🛍️ New Order — ₦${order.total.toLocaleString('en-NG')} from ${order.customerName}`,
     html: `
-      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;
-        background:#111;color:#fff;padding:32px;">
+      <div style="font-family:Arial,sans-serif;max-width:600px;
+        margin:0 auto;background:#111;color:#fff;padding:32px;">
 
         <div style="text-align:center;margin-bottom:24px;">
-          <h1 style="font-size:2rem;letter-spacing:0.12em;color:#fff;margin:0;">
+          <h1 style="font-size:2rem;letter-spacing:0.12em;
+            color:#fff;margin:0;">
             ZALAM<span style="color:#c9a84c;">S</span>
           </h1>
         </div>
@@ -253,24 +254,21 @@ export function newOrderAlertEmail(order) {
           A new order has been placed on Zalams Luxury.
         </p>
 
-        <div style="background:#1a1a1a;border:1px solid #222;
-          padding:20px;margin-bottom:24px;">
+        <!-- Customer Info -->
+        <div style="background:#1a1a1a;border:1px solid #333;
+          padding:20px;margin-bottom:16px;">
+          <p style="color:#c9a84c;font-size:0.72rem;
+            letter-spacing:0.15em;text-transform:uppercase;
+            margin:0 0 12px;">
+            Customer Information
+          </p>
           <table style="width:100%;">
             <tr>
               <td style="color:#888;padding:6px 0;font-size:0.82rem;">
-                Order ID
-              </td>
-              <td style="color:#c9a84c;padding:6px 0;font-size:0.82rem;
-                text-align:right;font-weight:bold;">
-                #${order._id.toString().slice(-8).toUpperCase()}
-              </td>
-            </tr>
-            <tr>
-              <td style="color:#888;padding:6px 0;font-size:0.82rem;">
-                Customer
+                Name
               </td>
               <td style="color:#fff;padding:6px 0;font-size:0.82rem;
-                text-align:right;">
+                text-align:right;font-weight:bold;">
                 ${order.customerName}
               </td>
             </tr>
@@ -278,7 +276,7 @@ export function newOrderAlertEmail(order) {
               <td style="color:#888;padding:6px 0;font-size:0.82rem;">
                 Email
               </td>
-              <td style="color:#fff;padding:6px 0;font-size:0.82rem;
+              <td style="color:#c9a84c;padding:6px 0;font-size:0.82rem;
                 text-align:right;">
                 ${order.email}
               </td>
@@ -294,19 +292,42 @@ export function newOrderAlertEmail(order) {
             </tr>
             <tr>
               <td style="color:#888;padding:6px 0;font-size:0.82rem;">
-                Items
+                Delivery Address
               </td>
               <td style="color:#fff;padding:6px 0;font-size:0.82rem;
                 text-align:right;">
-                ${order.items.length} item(s)
+                ${order.address?.street || 'TBD'},
+                ${order.address?.city || ''},
+                ${order.address?.state || ''}
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Order Info -->
+        <div style="background:#1a1a1a;border:1px solid #333;
+          padding:20px;margin-bottom:16px;">
+          <p style="color:#c9a84c;font-size:0.72rem;
+            letter-spacing:0.15em;text-transform:uppercase;
+            margin:0 0 12px;">
+            Order Details
+          </p>
+          <table style="width:100%;">
+            <tr>
+              <td style="color:#888;padding:6px 0;font-size:0.82rem;">
+                Order ID
+              </td>
+              <td style="color:#c9a84c;padding:6px 0;
+                font-size:0.82rem;text-align:right;font-weight:bold;">
+                #${order._id.toString().slice(-8).toUpperCase()}
               </td>
             </tr>
             <tr>
               <td style="color:#888;padding:6px 0;font-size:0.82rem;">
                 Total
               </td>
-              <td style="color:#c9a84c;padding:6px 0;font-size:1.1rem;
-                text-align:right;font-weight:bold;">
+              <td style="color:#c9a84c;padding:6px 0;
+                font-size:1.1rem;text-align:right;font-weight:bold;">
                 ₦${order.total.toLocaleString('en-NG')}
               </td>
             </tr>
@@ -314,24 +335,40 @@ export function newOrderAlertEmail(order) {
               <td style="color:#888;padding:6px 0;font-size:0.82rem;">
                 Payment
               </td>
-              <td style="color:#4caf50;padding:6px 0;font-size:0.82rem;
-                text-align:right;font-weight:bold;">
-                ${order.paymentStatus.toUpperCase()}
+              <td style="color:#fff;padding:6px 0;
+                font-size:0.82rem;text-align:right;">
+                ${order.paymentMethod} —
+                <span style="color:${order.paymentStatus === 'paid'
+                  ? '#4caf50' : 'orange'}">
+                  ${order.paymentStatus.toUpperCase()}
+                </span>
               </td>
             </tr>
           </table>
         </div>
 
-        <div style="margin-bottom:24px;">
-          <p style="color:#888;font-size:0.72rem;letter-spacing:0.15em;
-            text-transform:uppercase;margin-bottom:12px;">
+        <!-- Items -->
+        <div style="background:#1a1a1a;border:1px solid #333;
+          padding:20px;margin-bottom:24px;">
+          <p style="color:#c9a84c;font-size:0.72rem;
+            letter-spacing:0.15em;text-transform:uppercase;
+            margin:0 0 12px;">
             Items Ordered
           </p>
           ${order.items.map(item => `
-            <div style="border-bottom:1px solid #222;padding:10px 0;">
-              <p style="color:#fff;margin:0;font-size:0.85rem;">${item.name}</p>
-              <p style="color:#888;margin:4px 0 0;font-size:0.78rem;">
-                Qty: ${item.quantity} ·
+            <div style="border-bottom:1px solid #222;padding:10px 0;
+              display:flex;justify-content:space-between;">
+              <div>
+                <p style="color:#fff;margin:0;font-size:0.85rem;">
+                  ${item.name}
+                </p>
+                <p style="color:#888;margin:4px 0 0;font-size:0.75rem;">
+                  Qty: ${item.quantity}
+                  ${item.size ? `· Size: ${item.size}` : ''}
+                </p>
+              </div>
+              <p style="color:#c9a84c;margin:0;font-size:0.85rem;
+                font-weight:bold;">
                 ₦${(item.price * item.quantity).toLocaleString('en-NG')}
               </p>
             </div>
@@ -339,9 +376,10 @@ export function newOrderAlertEmail(order) {
         </div>
 
         <a href="${process.env.FRONTEND_URL}/admin.html"
-          style="display:inline-block;padding:12px 28px;background:#c9a84c;
-          color:#000;font-weight:bold;text-decoration:none;
-          text-transform:uppercase;letter-spacing:0.1em;font-size:0.82rem;">
+          style="display:inline-block;padding:12px 28px;
+          background:#c9a84c;color:#000;font-weight:bold;
+          text-decoration:none;text-transform:uppercase;
+          letter-spacing:0.1em;font-size:0.82rem;">
           View in Admin Panel →
         </a>
 

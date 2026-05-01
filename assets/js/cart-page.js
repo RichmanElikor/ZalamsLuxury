@@ -9,42 +9,37 @@ function renderCartPage() {
 
   if (!layout) return;
 
-  // Update header count
   const totalItems = getCartCount();
   if (itemCountEl) itemCountEl.textContent = totalItems;
 
-  // Empty cart state
   if (cart.length === 0) {
     layout.innerHTML = `
       <div class="cart-empty">
         <div class="cart-empty__icon">🛒</div>
         <h2 class="cart-empty__title">Your Cart is Empty</h2>
-        <p class="cart-empty__text">Looks like you haven't added anything yet.</p>
+        <p class="cart-empty__text">
+          Looks like you haven't added anything yet.
+        </p>
         <a href="shop.html" class="btn-gold">Start Shopping</a>
       </div>
     `;
     return;
   }
 
-  // Build cart items HTML
   const itemsHTML = `
     <div class="cart-items">
-
       <div class="cart-items__header">
         <span>Product</span>
         <span>Price</span>
         <span>Quantity</span>
         <span>Remove</span>
       </div>
-
       <div id="cart-items-list">
         ${cart.map(item => `
           <div class="cart-item" data-id="${item.id}">
-
             <div class="cart-item__product">
               <img class="cart-item__img"
-                src="${item.image}"
-                alt="${item.name}" />
+                src="${item.image}" alt="${item.name}" />
               <div class="cart-item__details">
                 <p class="cart-item__name">${item.name}</p>
                 <p class="cart-item__meta">
@@ -52,37 +47,29 @@ function renderCartPage() {
                 </p>
               </div>
             </div>
-
             <div class="cart-item__price">
               ₦${(item.price * item.quantity).toLocaleString('en-NG')}
             </div>
-
             <div class="cart-item__qty">
               <button class="cart-item__qty-btn"
-                onclick="changeQty(${item.id}, -1)">−</button>
+                data-action="minus" data-id="${item.id}">−</button>
               <span class="cart-item__qty-val">${item.quantity}</span>
               <button class="cart-item__qty-btn"
-                onclick="changeQty(${item.id}, 1)">+</button>
+                data-action="plus" data-id="${item.id}">+</button>
             </div>
-
             <button class="cart-item__remove"
-              onclick="removeItem(${item.id})"
-              title="Remove item">✕</button>
-
+              data-action="remove" data-id="${item.id}">✕</button>
           </div>
         `).join('')}
       </div>
-
       <div class="cart-items__footer">
-        <button class="btn-clear-cart" onclick="clearCart()">
+        <button class="btn-clear-cart" id="clear-cart-btn">
           Clear Entire Cart
         </button>
       </div>
-
     </div>
   `;
 
-  // Build summary HTML
   const subtotal = getCartTotal();
   const delivery = subtotal >= 50000 ? 0 : 5000;
   const total = subtotal + delivery;
@@ -90,38 +77,31 @@ function renderCartPage() {
   const summaryHTML = `
     <div class="cart-summary">
       <h2 class="cart-summary__title">Order Summary</h2>
-
       <div class="cart-summary__row">
         <span class="cart-summary__label">Subtotal</span>
         <span class="cart-summary__value">
           ₦${subtotal.toLocaleString('en-NG')}
         </span>
       </div>
-
       <div class="cart-summary__row">
         <span class="cart-summary__label">Delivery</span>
         <span class="cart-summary__value ${delivery === 0 ? 'free' : ''}">
           ${delivery === 0 ? 'FREE' : '₦' + delivery.toLocaleString('en-NG')}
         </span>
       </div>
-
       <div class="cart-summary__divider"></div>
-
       <div class="cart-summary__row">
         <span class="cart-summary__total-label">Total</span>
         <span class="cart-summary__total-value">
           ₦${total.toLocaleString('en-NG')}
         </span>
       </div>
-
-      <button class="btn-checkout" onclick="proceedToCheckout()">
+      <button class="btn-checkout" id="checkout-btn">
         Proceed to Checkout
       </button>
-
       <a href="shop.html" class="btn-continue">
         ← Continue Shopping
       </a>
-
       <p class="cart-summary__note">
         Free delivery on orders over ₦50,000 ·
         Returns accepted within 7 days
@@ -130,75 +110,105 @@ function renderCartPage() {
   `;
 
   layout.innerHTML = itemsHTML + summaryHTML;
+
+  // Attach events AFTER rendering
+  attachCartEvents();
 }
 
 
-// --- Change quantity ---
-function changeQty(productId, delta) {
-  const item = cart.find(i => i.id === productId);
-  if (!item) return;
+function attachCartEvents() {
+  // Quantity and remove buttons
+  document.querySelectorAll('.cart-item__qty-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      const action = btn.dataset.action;
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
 
-  item.quantity += delta;
+      if (action === 'plus') {
+        item.quantity++;
+        saveCart();
+      } else if (action === 'minus') {
+        item.quantity--;
+        if (item.quantity <= 0) {
+          removeFromCart(id);
+        } else {
+          saveCart();
+        }
+      }
+      renderCartPage();
+    });
+  });
 
-  if (item.quantity <= 0) {
-    removeFromCart(productId);
-  } else {
-    saveCart();
+  // Remove buttons
+  document.querySelectorAll('.cart-item__remove').forEach(btn => {
+    btn.addEventListener('click', () => {
+      removeFromCart(btn.dataset.id);
+      renderCartPage();
+    });
+  });
+
+  // Clear cart
+  const clearBtn = document.getElementById('clear-cart-btn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      if (confirm('Clear entire cart?')) {
+        clearEntireCart();
+        renderCartPage();
+      }
+    });
   }
 
-  renderCartPage();
-}
-
-
-// --- Remove single item ---
-function removeItem(productId) {
-  removeFromCart(productId);
-  renderCartPage();
-}
-
-
-// --- Clear entire cart ---
-function clearCart() {
-  if (confirm('Are you sure you want to clear your entire cart?')) {
-    clearEntireCart();
-    renderCartPage();
+  // Checkout
+  const checkoutBtn = document.getElementById('checkout-btn');
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', proceedToCheckout);
   }
 }
 
+async function getFlwPublicKey() {
+  try {
+    const res = await fetch('/api/flutterwave/config');
+    const data = await res.json();
+    return data.publicKey;
+  } catch {
+    return null;
+  }
+}
 
-// --- Proceed to checkout ---
 async function proceedToCheckout() {
   if (cart.length === 0) {
     alert('Your cart is empty!');
     return;
   }
 
-  // Get subtotal and delivery
+  const user = getUser();
+  if (!user) {
+    alert('Please log in to checkout.');
+    window.location.href = 'login.html';
+    return;
+  }
+
   const subtotal = getCartTotal();
   const deliveryFee = subtotal >= 50000 ? 0 : 5000;
   const total = subtotal + deliveryFee;
 
-  // Show loading state on button
-  const btn = document.querySelector('.btn-checkout');
-  btn.textContent = 'Processing...';
-  btn.disabled = true;
+  const btn = document.getElementById('checkout-btn');
+  if (btn) {
+    btn.textContent = 'Processing...';
+    btn.disabled = true;
+  }
 
   try {
-    // Send cart to backend
-    const response = await fetch('/api/payment/create-checkout', {
+    // First save order to our backend
+    const orderResponse = await fetch('/api/orders', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        customerName: 'Guest',        // We'll collect this properly later
-        email: 'guest@zalams.com',    // Will come from login system later
-        phone: '00000000000',
-        address: {
-          street: 'TBD',
-          city: 'TBD',
-          state: 'TBD'
-        },
+        customerName: user.name,
+        email: user.email,
+        phone: user.phone || '08000000000',
+        address: { street: 'TBD', city: 'TBD', state: 'TBD' },
         items: cart.map(item => ({
           productId: item.id,
           name: item.name,
@@ -208,31 +218,94 @@ async function proceedToCheckout() {
         })),
         subtotal,
         deliveryFee,
-        total
+        total,
+        paymentMethod: 'flutterwave'
       })
     });
 
-    const data = await response.json();
+    const orderData = await orderResponse.json();
 
-    if (data.success) {
-      // Redirect to Stripe checkout page
-      window.location.href = data.sessionUrl;
-    } else {
-      alert('Checkout failed: ' + data.message);
-      btn.textContent = 'Proceed to Checkout';
-      btn.disabled = false;
+    if (!orderData.success) {
+      alert('Could not create order. Please try again.');
+      if (btn) {
+        btn.textContent = 'Proceed to Checkout';
+        btn.disabled = false;
+      }
+      return;
     }
+
+    const order = orderData.order;
+    const txRef = `ZALAMS-${order._id}-${Date.now()}`;
+    const publicKey = await getFlwPublicKey();
+    if (!publicKey) {
+      alert('Payment system unavailable. Please try again.');
+      if (btn) { btn.textContent = 'Proceed to Checkout'; btn.disabled = false; }
+      return;
+}
+    // Initialize Flutterwave inline payment
+    FlutterwaveCheckout({
+      public_key: publickey,
+      tx_ref: txRef,
+      amount: total,
+      currency: 'NGN',
+      payment_options: 'card, banktransfer, ussd',
+      customer: {
+        email: user.email,
+        phone_number: user.phone || '08000000000',
+        name: user.name
+      },
+      customizations: {
+        title: 'Zalams Luxury',
+        description: `Order #${order._id.slice(-8).toUpperCase()}`,
+        logo: window.location.origin + '/assets/images/logo/zalams-logo.png'
+      },
+      callback: async function(response) {
+        if (response.status === 'successful') {
+          // Verify payment on backend
+          try {
+            await fetch('/api/flutterwave/confirm', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                orderId: order._id,
+                txRef,
+                transactionId: response.transaction_id
+              })
+            });
+          } catch (e) {
+            console.error('Confirm error:', e);
+          }
+
+          clearEntireCart();
+          window.location.href =
+            `/success.html?order_id=${order._id}`;
+        } else {
+          alert('Payment was not successful. Please try again.');
+          if (btn) {
+            btn.textContent = 'Proceed to Checkout';
+            btn.disabled = false;
+          }
+        }
+      },
+      onclose: function() {
+        if (btn) {
+          btn.textContent = 'Proceed to Checkout';
+          btn.disabled = false;
+        }
+      }
+    });
 
   } catch (error) {
     console.error('Checkout error:', error);
     alert('Something went wrong. Please try again.');
-    btn.textContent = 'Proceed to Checkout';
-    btn.disabled = false;
+    if (btn) {
+      btn.textContent = 'Proceed to Checkout';
+      btn.disabled = false;
+    }
   }
 }
 
 
-// --- Init ---
 document.addEventListener('DOMContentLoaded', () => {
   renderCartPage();
 });

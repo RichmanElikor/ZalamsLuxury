@@ -24,8 +24,15 @@ if (user) {
   document.getElementById('account-email').textContent = user.email;
   document.getElementById('account-avatar').textContent =
     user.name.charAt(0).toUpperCase();
-  document.getElementById('profile-name').value = user.name;
-  document.getElementById('profile-email').value = user.email;
+  document.getElementById('profile-name').value = user.name || '';
+  document.getElementById('profile-email').value = user.email || '';
+  document.getElementById('profile-phone').value = user.phone || '';
+  document.getElementById('profile-street').value =
+    user.address?.street || '';
+  document.getElementById('profile-city').value =
+    user.address?.city || '';
+  document.getElementById('profile-state').value =
+    user.address?.state || '';
 }
 
 
@@ -141,11 +148,11 @@ async function loadOrders() {
 
 // --- Save Profile ---
 async function saveProfile() {
-  const name = document.getElementById('profile-name').value.trim();
-  const street = document.getElementById('profile-street').value.trim();
-  const city = document.getElementById('profile-city').value.trim();
-  const state = document.getElementById('profile-state').value.trim();
-  const phone = document.getElementById('profile-phone').value.trim();
+  const name = document.getElementById('profile-name')?.value.trim();
+  const street = document.getElementById('profile-street')?.value.trim();
+  const city = document.getElementById('profile-city')?.value.trim();
+  const state = document.getElementById('profile-state')?.value.trim();
+  const phone = document.getElementById('profile-phone')?.value.trim();
   const successEl = document.getElementById('profile-success');
 
   try {
@@ -157,23 +164,40 @@ async function saveProfile() {
       },
       body: JSON.stringify({
         name,
-        address: { street, city, state, phone }
+        phone,
+        address: { street, city, state }
       })
     });
 
     const data = await response.json();
 
     if (data.success) {
-      // Update localStorage with new name
-      const updatedUser = { ...user, name };
+      // Update localStorage with ALL user data
+      const updatedUser = {
+        ...user,
+        name: data.user.name,
+        phone: data.user.phone,
+        address: data.user.address
+      };
       localStorage.setItem('zalams-user', JSON.stringify(updatedUser));
-      successEl.textContent = '✓ Profile updated successfully!';
-      setTimeout(() => successEl.textContent = '', 3000);
+
+      if (successEl) {
+        successEl.style.color = '#4caf50';
+        successEl.textContent = '✓ Profile saved successfully!';
+        setTimeout(() => successEl.textContent = '', 3000);
+      }
+    } else {
+      if (successEl) {
+        successEl.style.color = '#ff4444';
+        successEl.textContent = data.message || 'Could not save.';
+      }
     }
 
   } catch (error) {
-    successEl.style.color = '#ff4444';
-    successEl.textContent = 'Could not save profile. Try again.';
+    if (successEl) {
+      successEl.style.color = '#ff4444';
+      successEl.textContent = 'Something went wrong. Try again.';
+    }
   }
 }
 
