@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Detail — Zalams Admin</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/admin.css" />
+</head>
+<body>
+
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar__logo">
+      <a href="admin.html">ZALAM<span>S</span></a>
+      <span class="admin-badge">Admin</span>
+    </div>
+    <nav class="admin-nav">
+      <button class="admin-nav__item"
+        onclick="window.location.href='admin.html'">
+        <span class="admin-nav__icon">←</span>
+        Back to Dashboard
+      </button>
+    </nav>
+    <div class="admin-sidebar__footer">
+      <p class="admin-user" id="admin-user-name">Admin</p>
+      <button class="admin-logout" onclick="handleLogout()">Logout</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1 class="admin-topbar__title" id="order-title">Order Detail</h1>
+      <p class="admin-topbar__date" id="order-date"></p>
+    </div>
+
+    <div id="order-detail-content">
+      <p class="admin-empty">Loading order...</p>
+    </div>
+  </main>
+
+  <script src="assets/js/auth.js"></script>
+  <script>
+    const ADMIN_API = 'http://localhost:3000/api';
+    const adminToken = localStorage.getItem('zalams-token');
+    const adminUser = JSON.parse(
+      localStorage.getItem('zalams-user') || '{}'
+    );
+
+    if (!adminToken || adminUser.role !== 'admin') {
+      window.location.href = 'login.html';
+    }
+
+    const adminNameEl = document.getElementById('admin-user-name');
+    if (adminNameEl) adminNameEl.textContent = adminUser.name || 'Admin';
+
+    const authHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${adminToken}`
+    };
+
+    async function loadOrderDetail() {
+      const params = new URLSearchParams(window.location.search);
+      const orderId = params.get('id');
+
+      if (!orderId) {
+        document.getElementById('order-detail-content').innerHTML =
+          '<p class="admin-empty">No order ID provided</p>';
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `${ADMIN_API}/orders/${orderId}`,
+          { headers: authHeaders }
+        );
+        const data = await response.json();
+
+        if (!data.success) {
+          document.getElementById('order-detail-content').innerHTML =
+            '<p class="admin-empty">Order not found</p>';
+          return;
+        }
+
+        const order = data.order;
+
+        document.getElementById('order-title').textContent =
+          `Order #${order._id.slice(-8).toUpperCase()}`;
+        document.getElementById('order-date').textContent =
+          new Date(order.createdAt).toLocaleDateString('en-NG', {
+            weekday: 'long', year: 'numeric',
+            month: 'long', day: 'numeric'
+          });
+
+        document.getElementById('order-detail-content').innerHTML = `
+          <div style="display:grid;grid-template-columns:1fr 1fr;
+            gap:24px;margin-bottom:24px;">
+
+            <!-- Customer Info -->
+            <div class="admin-card">
+              <div class="admin-card__header">
+                <h2 class="admin-card__title">Customer Information</h2>
+              </div>
+              <table style="width:100%;">
+                <tr>
+                  <td class="detail-label">Full Name</td>
+                  <td class="detail-value">${order.customerName}</td>
+                </tr>
+                <tr>
+                  <td class="detail-label">Email</td>
+                  <td class="detail-value" style="color:#c9a84c;">
+                    <a href="mailto:${order.email}"
+                      style="color:#c9a84c;">${order.email}</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="detail-label">Phone</td>
+                  <td class="detail-value">${order.phone || 'N/A'}</td>
+                </tr>
+                <tr>
+                  <td class="detail-label">Street</td>
+                  <td class="detail-value">
+                    ${order.address?.street || 'N/A'}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="detail-label">City</td>
+                  <td class="detail-value">
+                    ${order.address?.city || 'N/A'}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="detail-label">State</td>
+                  <td class="detail-value">
+                    ${order.address?.state || 'N/A'}
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <!-- Order Info -->
+            <div class="admin-card">
+              <div class="admin-card__header">
+                <h2 class="admin-card__title">Order Information</h2>
+              </div>
+              <table style="width:100%;">
+                <tr>
+                  <td class="detail-label">Order ID</td>
+                  <td class="detail-value" style="color:#c9a84c;">
+                    #${order._id.slice(-8).toUpperCase()}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="detail-label">Payment Method</td>
+                  <td class="detail-value">${order.paymentMethod}</td>
+                </tr>
+                <tr>
+                  <td class="detail-label">Payment Status</td>
+                  <td class="detail-value">
+                    <span class="order-status ${order.paymentStatus}">
+                      ${order.paymentStatus}
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="detail-label">Order Status</td>
+                  <td class="detail-value">
+                    <span class="order-status ${order.status}">
+                      ${order.status}
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="detail-label">Subtotal</td>
+                  <td class="detail-value">
+                    ₦${order.subtotal?.toLocaleString('en-NG')}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="detail-label">Delivery Fee</td>
+                  <td class="detail-value">
+                    ${order.deliveryFee === 0
+                      ? 'FREE'
+                      : '₦' + order.deliveryFee?.toLocaleString('en-NG')}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="detail-label">Total</td>
+                  <td class="detail-value" style="color:#c9a84c;
+                    font-size:1.1rem;font-weight:bold;">
+                    ₦${order.total?.toLocaleString('en-NG')}
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Update Status -->
+              <div style="margin-top:20px;padding-top:16px;
+                border-top:1px solid #222;">
+                <p class="detail-label" style="margin-bottom:8px;">
+                  Update Status
+                </p>
+                <select class="admin-select" id="status-select"
+                  style="width:100%;margin-bottom:12px;">
+                  <option value="pending"
+                    ${order.status==='pending'?'selected':''}>
+                    Pending
+                  </option>
+                  <option value="processing"
+                    ${order.status==='processing'?'selected':''}>
+                    Processing
+                  </option>
+                  <option value="shipped"
+                    ${order.status==='shipped'?'selected':''}>
+                    Shipped
+                  </option>
+                  <option value="delivered"
+                    ${order.status==='delivered'?'selected':''}>
+                    Delivered
+                  </option>
+                  <option value="cancelled"
+                    ${order.status==='cancelled'?'selected':''}>
+                    Cancelled
+                  </option>
+                </select>
+                <button class="admin-btn-primary"
+                  onclick="updateStatus('${order._id}')">
+                  Update Status
+                </button>
+                <p id="status-msg" style="color:#4caf50;
+                  font-size:0.78rem;margin-top:8px;min-height:16px;"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Items -->
+          <div class="admin-card">
+            <div class="admin-card__header">
+              <h2 class="admin-card__title">Items Ordered</h2>
+              <p class="admin-count">${order.items.length} item(s)</p>
+            </div>
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Size</th>
+                  <th>Color</th>
+                  <th>Qty</th>
+                  <th>Unit Price</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${order.items.map(item => `
+                  <tr>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:12px;">
+                        ${item.image ? `
+                          <img src="${item.image}"
+                            style="width:48px;height:56px;
+                            object-fit:cover;background:#1a1a1a;"
+                            onerror="this.style.display='none'" />
+                        ` : ''}
+                        <span style="color:#fff;font-weight:500;">
+                          ${item.name}
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      <span style="color:#c9a84c;font-weight:600;">
+                        ${item.size || '—'}
+                      </span>
+                    </td>
+                    <td>${item.color || '—'}</td>
+                    <td>${item.quantity}</td>
+                    <td>₦${item.price?.toLocaleString('en-NG')}</td>
+                    <td style="color:#c9a84c;font-weight:bold;">
+                      ₦${(item.price * item.quantity)
+                        .toLocaleString('en-NG')}
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+
+      } catch (error) {
+        document.getElementById('order-detail-content').innerHTML =
+          '<p class="admin-empty">Could not load order</p>';
+      }
+    }
+
+    async function updateStatus(orderId) {
+      const status = document.getElementById('status-select').value;
+      const msgEl = document.getElementById('status-msg');
+
+      try {
+        const response = await fetch(
+          `${ADMIN_API}/orders/${orderId}/status`,
+          {
+            method: 'PATCH',
+            headers: authHeaders,
+            body: JSON.stringify({ status })
+          }
+        );
+        const data = await response.json();
+        if (data.success) {
+          msgEl.textContent = `✓ Status updated to ${status}`;
+          setTimeout(() => msgEl.textContent = '', 3000);
+        }
+      } catch (error) {
+        msgEl.style.color = '#ff4444';
+        msgEl.textContent = 'Could not update status';
+      }
+    }
+
+    loadOrderDetail();
+  </script>
+</body>
+</html>

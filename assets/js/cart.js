@@ -75,6 +75,46 @@ function addToCart(productId, quantity = 1) {
   saveCart();
 }
 
+function addToCartWithOptions(productId, quantity = 1,
+  size = '', color = '') {
+
+  const user = JSON.parse(
+    localStorage.getItem('zalams-user') || 'null'
+  );
+  if (!user) {
+    alert('Please log in to add items to your cart.');
+    window.location.href = 'login.html';
+    return;
+  }
+
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+
+  // Use id + size as unique key so same product
+  // in different sizes = different cart items
+  const cartKey = `${productId}-${size}`;
+  const existing = cart.find(
+    item => item.cartKey === cartKey
+  );
+
+  if (existing) {
+    existing.quantity += quantity;
+  } else {
+    cart.push({
+      cartKey,
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      size,
+      color,
+      quantity
+    });
+  }
+
+  saveCart();
+}
+
 // --- Remove item from cart ---
 function removeFromCart(productId) {
   cart = cart.filter(item => item.id !== productId);

@@ -58,15 +58,20 @@ const addCartBtn = document.getElementById('btn-add-cart');
 if (addCartBtn) {
   addCartBtn.addEventListener('click', () => {
     const sizeEl = document.getElementById('selected-size');
+    const colorEl = document.getElementById('selected-color-name');
     const size = sizeEl?.textContent;
+    const color = colorEl?.textContent;
 
-    if (size === 'Select a size') {
+    if (!size || size === 'Select a size') {
       alert('Please select a size first.');
       return;
     }
 
-    const productId = new URLSearchParams(window.location.search).get('id');
-    addToCart(productId, quantity);
+    const productId = new URLSearchParams(
+      window.location.search
+    ).get('id');
+
+    addToCartWithOptions(productId, quantity, size, color);
 
     addCartBtn.textContent = '✓ Added to Cart';
     addCartBtn.style.backgroundColor = 'var(--color-gold)';

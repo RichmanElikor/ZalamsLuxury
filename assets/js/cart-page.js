@@ -41,9 +41,15 @@ function renderCartPage() {
               <img class="cart-item__img"
                 src="${item.image}" alt="${item.name}" />
               <div class="cart-item__details">
-                <p class="cart-item__name">${item.name}</p>
+                <p class="cart-item__name"
+                  style="cursor:pointer;text-decoration:underline;"
+                  onclick="window.location.href='product.html?id=${item.id}'">
+                  ${item.name}
+                </p>
                 <p class="cart-item__meta">
                   ₦${item.price.toLocaleString('en-NG')} each
+                  ${item.size ? `· Size: <strong>${item.size}</strong>` : ''}
+                  ${item.color ? `· ${item.color}` : ''}
                 </p>
               </div>
             </div>
@@ -244,7 +250,7 @@ async function proceedToCheckout() {
 }
     // Initialize Flutterwave inline payment
     FlutterwaveCheckout({
-      public_key: publickey,
+      public_key: publicKey,
       tx_ref: txRef,
       amount: total,
       currency: 'NGN',
@@ -257,7 +263,7 @@ async function proceedToCheckout() {
       customizations: {
         title: 'Zalams Luxury',
         description: `Order #${order._id.slice(-8).toUpperCase()}`,
-        logo: window.location.origin + '/assets/images/logo/zalams-logo.png'
+        logo: ''  // Remove logo - leave empty
       },
       callback: async function(response) {
         if (response.status === 'successful') {

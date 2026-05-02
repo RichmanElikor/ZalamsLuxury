@@ -207,8 +207,9 @@ function renderOrders(orders) {
       <tbody>
         ${orders.map(order => `
           <tr>
-            <td style="color:#c9a84c">
-              #${order._id.slice(-8).toUpperCase()}
+            <td style="color:#c9a84c;cursor:pointer;"
+              onclick="window.location.href='admin-order.html?id=${order._id}'">
+              #${order._id.slice(-8).toUpperCase()} →
             </td>
             <td>
               ${order.customerName}<br/>

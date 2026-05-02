@@ -54,6 +54,7 @@ app.use('/api/orders', ordersRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/payment', paymentRouter); 
 app.use('/api/auth', authRouter);
+app.use('/api/flutterwave', flutterwaveRouter);
 app.use('/api/products/upload', uploadRouter);
 
 
