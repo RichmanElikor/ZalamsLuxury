@@ -803,3 +803,87 @@ button {
   .shop-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .category-tab { padding: 14px 16px; font-size: 0.7rem; }
 }
+
+/* --- Quick Size Picker --- */
+.size-picker {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e8e8e4;
+  border-bottom: none;
+  padding: 12px;
+  z-index: 20;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  animation: slideUp 0.2s ease forwards;
+}
+
+.size-picker.open {
+  display: flex;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.size-picker__label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #888;
+  margin: 0;
+}
+
+.size-picker__options {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.size-picker__btn {
+  padding: 5px 10px;
+  border: 1px solid #e8e8e4;
+  background: #fff;
+  color: #111;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: var(--font-body);
+  border-radius: 2px;
+}
+
+.size-picker__btn:hover {
+  border-color: #111;
+  background: #111;
+  color: #fff;
+}
+
+.size-picker__btn.selected {
+  border-color: var(--color-gold);
+  background: var(--color-gold);
+  color: #000;
+}
+
+.shop-card {
+  position: relative;  /* needed for size picker positioning */
+}
+
+.shop-card__btn-wrap {
+  position: relative;
+}
+
+.product-card {
+  position: relative;
+}
+
+.product-card__btn-wrap {
+  position: relative;
+}
+

@@ -154,6 +154,16 @@ async function handleLogin() {
     if (data.success) {
       saveAuth(data.token, data.user);
 
+      // Store full profile in localStorage
+      localStorage.setItem('zalams-user', JSON.stringify({
+        id: data.user.id,
+        name: data.user.name,
+        email: data.user.email,
+        role: data.user.role,
+        phone: data.user.phone || '',
+        address: data.user.address || {}
+      }));
+
       // Redirect admin to admin panel, customers to home
       if (data.user.role === 'admin') {
         window.location.href = 'admin.html';

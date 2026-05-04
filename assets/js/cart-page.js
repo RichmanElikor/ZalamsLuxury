@@ -220,7 +220,9 @@ async function proceedToCheckout() {
           name: item.name,
           price: item.price,
           quantity: item.quantity,
-          image: item.image
+          image: item.image,
+          size: item.size || '',
+          color: item.color || ''
         })),
         subtotal,
         deliveryFee,

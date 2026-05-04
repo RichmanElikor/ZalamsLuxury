@@ -51,6 +51,20 @@ function renderColorDots(colors, prefix = 'card') {
 
 // --- Homepage Product Card ---
 function createProductCard(product) {
+  const sizes = product.sizes && product.sizes.length > 0
+    ? product.sizes
+    : ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+
+  const savedSize = localStorage.getItem('zalams-preferred-size') || '';
+
+  const sizeButtons = sizes.map(size => `
+    <button class="size-picker__btn ${size === savedSize ? 'selected' : ''}"
+      data-size="${size}"
+      onclick="selectSize(this, '${product.id}', '${size}', event)">
+      ${size}
+    </button>
+  `).join('');
+
   return `
     <div class="product-card" data-id="${product.id}">
       <div class="product-card__img-wrap">
@@ -64,7 +78,7 @@ function createProductCard(product) {
         />
         <div class="product-card__overlay">
           <button class="product-card__overlay-btn"
-            onclick="addToCart('${product.id}')">
+            onclick="handleAddToCart('${product.id}', event)">
             Add to Cart
           </button>
         </div>
@@ -74,8 +88,13 @@ function createProductCard(product) {
           <p class="product-card__name">${product.name}</p>
         </a>
         <p class="product-card__price">${formatPrice(product.price)}</p>
-        <div class="product-card__colors">
-          ${renderColorDots(product.colors, 'color')}
+      </div>
+      <div class="product-card__btn-wrap">
+        <div class="size-picker" data-picker-id="${product.id}">
+          <p class="size-picker__label">Select Size</p>
+          <div class="size-picker__options">
+            ${sizeButtons}
+          </div>
         </div>
       </div>
     </div>
@@ -85,6 +104,20 @@ function createProductCard(product) {
 
 // --- Shop Page Card ---
 function createShopCard(product) {
+  const sizes = product.sizes && product.sizes.length > 0
+    ? product.sizes
+    : ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+
+  const savedSize = localStorage.getItem('zalams-preferred-size') || '';
+
+  const sizeButtons = sizes.map(size => `
+    <button class="size-picker__btn ${size === savedSize ? 'selected' : ''}"
+      data-size="${size}"
+      onclick="selectSize(this, '${product.id}', '${size}', event)">
+      ${size}
+    </button>
+  `).join('');
+
   return `
     <div class="shop-card" data-id="${product.id}">
       <div class="shop-card__img-wrap">
@@ -100,17 +133,110 @@ function createShopCard(product) {
       <div class="shop-card__body">
         <p class="shop-card__name">${product.name}</p>
         <p class="shop-card__price">${formatPrice(product.price)}</p>
-        <div class="shop-card__colors">
-          ${renderColorDots(product.colors, 'shop-card')}
-        </div>
       </div>
-      <a href="product.html?id=${product.id}">
-        <button class="shop-card__btn">Select Options</button>
-      </a>
+      <div class="shop-card__btn-wrap">
+        <a href="product.html?id=${product.id}"
+          class="shop-card__btn">
+          Select Options
+        </a>
+      </div>
     </div>
   `;
 }
 
+
+// --- Size picker logic ---
+
+let activePicker = null;
+
+function handleAddToCart(productId, event) {
+  event.stopPropagation();
+
+  const picker = document.querySelector(
+    `[data-picker-id="${productId}"]`
+  );
+
+  if (!picker) return;
+
+  // Close any other open picker
+  if (activePicker && activePicker !== picker) {
+    activePicker.classList.remove('open');
+  }
+
+  // Toggle this picker
+  const isOpen = picker.classList.contains('open');
+
+  if (isOpen) {
+    // If clicking again and a size is selected, add to cart
+    const savedSize = localStorage.getItem('zalams-preferred-size');
+    if (savedSize) {
+      addToCartWithSize(productId, savedSize);
+      picker.classList.remove('open');
+      activePicker = null;
+    }
+  } else {
+    picker.classList.add('open');
+    activePicker = picker;
+  }
+}
+
+function selectSize(btn, productId, size, event) {
+  event.stopPropagation();
+
+  localStorage.setItem('zalams-preferred-size', size);
+
+  document.querySelectorAll('.size-picker__btn').forEach(b => {
+    b.classList.toggle('selected', b.dataset.size === size);
+  });
+
+  addToCartWithSize(productId, size);
+
+  const picker = document.querySelector(
+    `[data-picker-id="${productId}"]`
+  );
+  if (picker) picker.classList.remove('open');
+  activePicker = null;
+}
+
+function addToCartWithSize(productId, size) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return false;
+
+  const user = JSON.parse(localStorage.getItem('zalams-user') || 'null');
+  if (!user) {
+    alert('Please log in to add items to your cart.');
+    window.location.href = 'login.html';
+    return false;
+  }
+
+  // Add to cart
+  addToCartWithOptions(productId, 1, size, '');
+
+  // Show feedback on button
+  const btn = document.querySelector(
+    `[data-id="${productId}"] .shop-card__btn`
+  );
+  if (btn) {
+    btn.textContent = `✓ Added (${size})`;
+    btn.style.background = 'var(--color-gold)';
+    btn.style.color = '#000';
+    setTimeout(() => {
+      btn.textContent = 'Select Options';
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 2000);
+  }
+
+  return true;
+}
+
+// Close size picker when clicking elsewhere
+document.addEventListener('click', () => {
+  if (activePicker) {
+    activePicker.classList.remove('open');
+    activePicker = null;
+  }
+});
 
 // --- Render Homepage Grids ---
 function renderProducts(containerId, items) {

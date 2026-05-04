@@ -165,7 +165,9 @@ router.post('/login', async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        phone: user.phone || '',
+        address: user.address || {}
       }
     });
 
@@ -213,7 +215,8 @@ router.get('/me', async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        address: user.address
+        phone: user.phone || '',
+        address: user.address || {}
       }
     });
 
@@ -274,7 +277,7 @@ router.put('/update-profile', async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      phone: user.phone,
+      phone: user.phone || '',
       address: user.address
     };
 
@@ -308,7 +311,7 @@ router.patch('/make-admin', async (req, res) => {
     const user = await User.findOneAndUpdate(
       { email },
       { role: 'admin' },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     if (!user) {

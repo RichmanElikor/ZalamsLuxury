@@ -443,6 +443,102 @@ export function orderShippedEmail(order) {
   };
 }
 
+export function orderDeliveredEmail(order) {
+  return {
+    from: process.env.EMAIL_FROM,
+    to: order.email,
+    subject: `Your Order Has Been Delivered — Zalams Luxury 🎉`,
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:600px;
+        margin:0 auto;background:#111;color:#fff;padding:32px;">
+
+        <div style="text-align:center;margin-bottom:32px;">
+          <h1 style="font-size:2rem;letter-spacing:0.12em;
+            color:#fff;margin:0;">
+            ZALAM<span style="color:#c9a84c;">S</span>
+          </h1>
+        </div>
+
+        <h2 style="color:#4caf50;text-transform:uppercase;
+          letter-spacing:0.06em;margin-bottom:8px;">
+          Your Order Has Arrived! 🎉
+        </h2>
+
+        <p style="color:#888;line-height:1.8;margin-bottom:24px;">
+          Hi ${order.customerName}, your order
+          <strong style="color:#c9a84c;">
+            #${order._id.toString().slice(-8).toUpperCase()}
+          </strong>
+          has been delivered successfully.
+          We hope you love your Zalams piece!
+        </p>
+
+        <div style="background:#1a1a1a;border:1px solid #222;
+          padding:24px;margin-bottom:24px;text-align:center;">
+          <p style="color:#c9a84c;font-size:2rem;margin:0 0 8px;">
+            🙏
+          </p>
+          <p style="color:#fff;font-size:1rem;font-weight:bold;
+            margin:0 0 8px;letter-spacing:0.05em;">
+            Thank You for Shopping with Us
+          </p>
+          <p style="color:#888;font-size:0.85rem;margin:0;
+            line-height:1.7;">
+            Your support means everything to us.
+            We put our heart into every piece and we hope
+            it shows every time you wear it.
+          </p>
+        </div>
+
+        <div style="background:#1a1a1a;border:1px solid #222;
+          padding:20px;margin-bottom:24px;">
+          <p style="color:#888;font-size:0.72rem;letter-spacing:0.15em;
+            text-transform:uppercase;margin:0 0 12px;">
+            Your Order
+          </p>
+          ${order.items.map(item => `
+            <div style="border-bottom:1px solid #222;padding:8px 0;">
+              <p style="color:#fff;margin:0;font-size:0.85rem;">
+                ${item.name}
+                ${item.size
+                  ? `<span style="color:#c9a84c;">· ${item.size}</span>`
+                  : ''}
+              </p>
+              <p style="color:#888;margin:4px 0 0;font-size:0.75rem;">
+                Qty: ${item.quantity}
+              </p>
+            </div>
+          `).join('')}
+        </div>
+
+        <p style="color:#888;font-size:0.85rem;line-height:1.8;
+          margin-bottom:24px;">
+          If you have any issues with your order please don't
+          hesitate to reach out to us at
+          <a href="mailto:hello@zalams.com"
+            style="color:#c9a84c;">hello@zalams.com</a>
+        </p>
+
+        <div style="text-align:center;">
+          <a href="${process.env.FRONTEND_URL}/shop.html"
+            style="display:inline-block;padding:14px 32px;
+            background:#c9a84c;color:#000;font-weight:bold;
+            text-decoration:none;text-transform:uppercase;
+            letter-spacing:0.1em;font-size:0.85rem;">
+            Shop Again →
+          </a>
+        </div>
+
+        <div style="margin-top:32px;padding-top:24px;
+          border-top:1px solid #222;text-align:center;">
+          <p style="color:#555;font-size:0.72rem;margin:0;">
+            © 2026 Zalams Luxury · hello@zalams.com
+          </p>
+        </div>
+      </div>
+    `
+  };
+}
 
 // --- Contact Form Notification (to admin) ---
 export function contactFormEmail(message) {

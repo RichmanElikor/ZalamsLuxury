@@ -169,14 +169,16 @@ router.get('/verify', async (req, res) => {
       const order = await Order.findOneAndUpdate(
         { flutterwaveTxRef: tx_ref },
         { paymentStatus: 'paid', status: 'processing' },
-        { new: true }
+        { returnDocument: 'after' }
       );
 
       if (order) {
+        // Only send to customer - not admin email
         sendEmail(orderConfirmationEmail(order));
-        sendEmail(newOrderAlertEmail(order));
+        // Remove: sendEmail(newOrderAlertEmail(order));
+        console.log(`✅ Payment confirmed: ${txRef}`);
       }
-
+        
       res.json({ success: true, paid: true, order });
     } else {
       res.json({
@@ -218,7 +220,7 @@ router.post('/webhook',
         const order = await Order.findOneAndUpdate(
           { flutterwaveTxRef: txRef },
           { paymentStatus: 'paid', status: 'processing' },
-          { new: true }
+          { returnDocument: 'after' }
         );
 
         if (order) {
@@ -260,7 +262,7 @@ router.post('/confirm', async (req, res) => {
           status: 'processing',
           flutterwaveTxRef: txRef
         },
-        { new: true }
+        { returnDocument: 'after' }
       );
 
       if (order) {

@@ -5,7 +5,12 @@
 
 import express from 'express';
 import Order from '../models/Order.js';
-import { sendEmail, orderShippedEmail } from '../config/email.js';
+import {
+  sendEmail,
+  orderShippedEmail,
+  orderDeliveredEmail
+} from '../config/email.js';
+
 
 const router = express.Router();
 
@@ -153,6 +158,11 @@ router.patch('/:id/status', async (req, res) => {
     // Send shipped email to customer
     if (status === 'shipped') {
       sendEmail(orderShippedEmail(order));
+    }
+
+    // Send delivered appreciation email
+    if (status === 'delivered') {
+      sendEmail(orderDeliveredEmail(order));
     }
 
     res.json({

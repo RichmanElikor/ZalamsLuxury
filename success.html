@@ -37,7 +37,7 @@
       font-size: 2.5rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--color-white);
+      color: var(--color-text);
       margin-bottom: 16px;
     }
 
@@ -103,9 +103,27 @@
     }
 
     .success-step__text strong {
-      color: var(--color-white);
+      color: var(--color-text);
       display: block;
       margin-bottom: 2px;
+    }
+
+    .btn-outline {
+      display: inline-block;
+      padding: 14px 32px;
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--color-gold);
+      color: var(--color-gold);
     }
   </style>
 </head>
@@ -128,12 +146,10 @@
           <div class="account-dropdown">
             <a href="login.html" class="account-link">Account</a>
             <div class="account-dropdown__menu" id="account-menu">
-              <!-- Shown when NOT logged in -->
               <div id="guest-menu">
                 <a href="login.html" class="account-dropdown__item">Login</a>
                 <a href="signup.html" class="account-dropdown__item">Sign Up</a>
               </div>
-              <!-- Shown when logged in -->
               <div id="user-menu" style="display:none">
                 <a href="javascript:void(0)"
                   class="account-dropdown__item"
@@ -145,14 +161,14 @@
                   onclick="window.location.href = getUser()?.role === 'admin' ? 'admin.html' : 'account.html#orders'">
                   My Orders
                 </a>
-                <button class="account-dropdown__item logout" onclick="handleLogout()">
-                  Logout
-                </button>
+                <button class="account-dropdown__item logout"
+                  onclick="handleLogout()">Logout</button>
               </div>
             </div>
           </div>
-  
-          <a href="cart.html">Cart <span class="cart-count" id="cart-count">0</span></a>
+          <a href="cart.html">
+            Cart <span class="cart-count" id="cart-count">0</span>
+          </a>
         </div>
         <div class="navbar__hamburger" id="hamburger">
           <span></span><span></span><span></span>
@@ -175,9 +191,9 @@
   <section class="success-section">
     <div class="success-card">
 
-      <span class="success-icon">✅</span>
-      <h1 class="success-title">Order Confirmed!</h1>
-      <p class="success-text">
+      <span class="success-icon" id="success-icon">✅</span>
+      <h1 class="success-title" id="success-title">Order Confirmed!</h1>
+      <p class="success-text" id="success-text">
         Thank you for your order. We've received your payment
         and your items are being prepared.
       </p>
@@ -215,7 +231,7 @@
 
       <div class="success-actions">
         <a href="shop.html" class="btn-gold">Continue Shopping</a>
-        <a href="index.html" class="btn-outline">Back to Home</a>
+        <a href="account.html#orders" class="btn-outline">View My Orders</a>
       </div>
 
     </div>
@@ -227,7 +243,9 @@
     <div class="container">
       <div class="footer__grid">
         <div class="footer__brand">
-          <a href="index.html" class="footer__brand-logo">ZALAM<span>S</span></a>
+          <a href="index.html" class="footer__brand-logo">
+            ZALAM<span>S</span>
+          </a>
           <p class="footer__brand-text">Premium clothing and accessories.</p>
           <div class="footer__socials">
             <a href="#" class="footer__social-link">IG</a>
@@ -259,7 +277,9 @@
         </div>
       </div>
       <div class="footer__bottom">
-        <p class="footer__copyright">© 2026 <span>Zalams Luxury</span>. All Rights Reserved.</p>
+        <p class="footer__copyright">
+          © 2026 <span>Zalams Luxury</span>. All Rights Reserved.
+        </p>
         <div class="footer__bottom-links">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
@@ -279,37 +299,70 @@
       const orderId = params.get('order_id');
       const status = params.get('status');
       const transactionId = params.get('transaction_id');
-      const orderIdEl = document.getElementById('order-id');
 
+      const orderIdEl = document.getElementById('order-id');
+      const titleEl = document.getElementById('success-title');
+      const iconEl = document.getElementById('success-icon');
+      const textEl = document.getElementById('success-text');
+
+      // No order ID in URL
       if (!orderId) {
-        if (orderIdEl) orderIdEl.textContent = 'No payment reference found.';
+        if (orderIdEl) orderIdEl.textContent = 'No order reference found.';
         return;
       }
 
+      // Payment cancelled
       if (status === 'cancelled') {
-        if (orderIdEl) orderIdEl.textContent = 'Payment was cancelled.';
-        setTimeout(() => window.location.href = 'cart.html', 2000);
+        if (iconEl) iconEl.textContent = '❌';
+        if (titleEl) titleEl.textContent = 'Payment Cancelled';
+        if (textEl) textEl.textContent =
+          'Your payment was cancelled. Your cart is still saved.';
+        if (orderIdEl) orderIdEl.textContent = '';
+        setTimeout(() => window.location.href = 'cart.html', 3000);
         return;
       }
 
       try {
-        let url = `/api/flutterwave/verify?order_id=${orderId}&status=${status}`;
-        if (transactionId) url += `&transaction_id=${transactionId}`;
-
-        const response = await fetch(url);
+        // Fetch order from our database
+        const response = await fetch(`/api/orders/${orderId}`);
         const data = await response.json();
 
-        if (data.success && data.paid) {
-          if (orderIdEl && data.order) {
-            orderIdEl.textContent =
-              `Order ID: #${data.order._id.slice(-8).toUpperCase()}`;
+        if (data.success && data.order) {
+          const order = data.order;
+
+          if (order.paymentStatus === 'paid') {
+            // Confirmed paid
+            if (iconEl) iconEl.textContent = '✅';
+            if (titleEl) titleEl.textContent = 'Order Confirmed!';
+            if (textEl) textEl.textContent =
+              `Thank you ${order.customerName}! Your payment was successful
+              and your items are being prepared.`;
+            if (orderIdEl) {
+              orderIdEl.textContent =
+                `Order ID: #${order._id.slice(-8).toUpperCase()}`;
+            }
+            // Clear cart
+            if (typeof clearEntireCart === 'function') clearEntireCart();
+
+          } else {
+            // Payment pending
+            if (iconEl) iconEl.textContent = '⏳';
+            if (titleEl) titleEl.textContent = 'Payment Pending';
+            if (textEl) textEl.textContent =
+              'Your order was placed but payment is still being confirmed. ' +
+              'Check your email for updates or contact us if this persists.';
+            if (orderIdEl) {
+              orderIdEl.textContent =
+                `Order ID: #${order._id.slice(-8).toUpperCase()}`;
+            }
           }
-          if (typeof clearEntireCart === 'function') clearEntireCart();
+
         } else {
           if (orderIdEl) {
-            orderIdEl.textContent = 'Payment verification pending...';
+            orderIdEl.textContent = 'Could not load order details.';
           }
         }
+
       } catch (error) {
         console.error('Verify error:', error);
         if (orderIdEl) {
@@ -320,7 +373,6 @@
 
     verifyPayment();
   </script>
-  </script>
-  <script src="assets/js/auth.js"></script>
+
 </body>
 </html>

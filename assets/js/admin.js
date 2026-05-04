@@ -219,19 +219,26 @@ function renderOrders(orders) {
             </td>
             <td>
               ${order.items.map(item => `
-                <div style="margin-bottom:4px;">
-                  <span style="color:#fff;font-size:0.78rem;">
+                <div style="margin-bottom:8px;padding-bottom:8px;
+                  border-bottom:1px solid #1a1a1a;">
+                  <p style="color:#fff;font-size:0.78rem;
+                    margin:0 0 2px;font-weight:500;">
                     ${item.name}
-                  </span>
-                  <span style="color:#888;font-size:0.72rem;">
-                    × ${item.quantity}
-                  </span>
-                  <span style="color:#c9a84c;font-size:0.72rem;">
+                  </p>
+                  <p style="color:#888;font-size:0.7rem;margin:0;">
+                    Qty: ${item.quantity}
+                    ${item.size
+                      ? `&nbsp;·&nbsp;<span style="color:#c9a84c;
+                          font-weight:700;">Size: ${item.size}</span>`
+                      : '<span style="color:#ff4444;">No size</span>'
+                    }
+                    &nbsp;·&nbsp;
                     ₦${(item.price * item.quantity).toLocaleString('en-NG')}
-                  </span>
+                  </p>
                 </div>
               `).join('')}
             </td>
+
             <td>₦${order.total.toLocaleString('en-NG')}</td>
             <td>
               <span class="order-status ${order.paymentStatus}">
