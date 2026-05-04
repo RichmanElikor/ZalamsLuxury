@@ -3,7 +3,9 @@
    assets/js/admin.js
 ================================ */
 
-const ADMIN_API = 'http://localhost:3000/api';
+const ADMIN_API = window.location.hostname === 'localhost'
+  ? 'http://localhost:3000/api'
+  : '/api';
 const adminToken = localStorage.getItem('zalams-token');
 const adminUser = JSON.parse(localStorage.getItem('zalams-user') || '{}');
 

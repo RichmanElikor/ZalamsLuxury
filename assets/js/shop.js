@@ -3,7 +3,9 @@
    assets/js/shop.js
 ================================ */
 
-var API = 'http://localhost:3000/api';
+var API = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3000/api' 
+  : '/api';
 
 // --- Products array (will be filled from API) ---
 let products = [];
