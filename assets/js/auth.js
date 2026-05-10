@@ -109,7 +109,7 @@ async function handleSignup() {
     if (data.success) {
       saveAuth(data.token, data.user);
       // Redirect to home after signup
-      window.location.href = 'index.html';
+      window.location.href = '/';
     } else {
       errorEl.textContent = data.message;
       btn.textContent = 'Create Account';
@@ -166,9 +166,9 @@ async function handleLogin() {
 
       // Redirect admin to admin panel, customers to home
       if (data.user.role === 'admin') {
-        window.location.href = 'admin.html';
+        window.location.href = '/admin';
       } else {
-        window.location.href = 'index.html';
+        window.location.href = '/';
       }
     } else {
       errorEl.textContent = data.message;
@@ -232,7 +232,7 @@ async function handleForgotPassword() {
           If an account exists for <strong style="color:var(--color-white);">
           ${email}</strong>, we've sent a password reset link.
         </p>
-        <a href="login.html" style="display:inline-block;margin-top:24px;
+        <a href="/login" style="display:inline-block;margin-top:24px;
           color:var(--color-gold);font-size:0.82rem;letter-spacing:0.1em;
           text-transform:uppercase;">
           ← Back to Login
@@ -301,7 +301,7 @@ async function handleResetPassword() {
           <p style="color:var(--color-grey);font-size:0.85rem;line-height:1.8;">
             Your password has been reset successfully.
           </p>
-          <a href="login.html" style="display:inline-block;margin-top:24px;
+          <a href="/login" style="display:inline-block;margin-top:24px;
             padding:12px 32px;background:var(--color-gold);color:#000;
             font-weight:bold;text-decoration:none;text-transform:uppercase;
             letter-spacing:0.1em;font-size:0.85rem;">
@@ -336,7 +336,7 @@ function toggleBothPasswords(checkbox) {
 // --- Handle Logout ---
 function handleLogout() {
   clearAuth();
-  window.location.href = 'index.html';
+  window.location.href = '/';
 }
 
 // --- Run on every page load ---

@@ -11,7 +11,7 @@
 
   <aside class="admin-sidebar">
     <div class="admin-sidebar__logo">
-      <a href="admin.html">ZALAM<span>S</span></a>
+      <a href="/admin">ZALAM<span>S</span></a>
       <span class="admin-badge">Admin</span>
     </div>
     <nav class="admin-nav">
@@ -47,7 +47,7 @@
     );
 
     if (!adminToken || adminUser.role !== 'admin') {
-      window.location.href = 'login.html';
+      window.location.href = '/login';
     }
 
     const adminNameEl = document.getElementById('admin-user-name');

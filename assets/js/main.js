@@ -39,6 +39,22 @@ mobileLinks.forEach(link => {
 });
 
 
+// Show first slide immediately without waiting
+const firstSlide = document.querySelector('.hero__slide');
+if (firstSlide) {
+  firstSlide.classList.add('active');
+  const firstImg = firstSlide.querySelector('img');
+  if (firstImg) {
+    // If image already cached, no flash
+    if (firstImg.complete) {
+      firstSlide.style.opacity = '1';
+    } else {
+      firstImg.addEventListener('load', () => {
+        firstSlide.style.opacity = '1';
+      });
+    }
+  }
+}
 // --- Hero Image Slider ---
 const slides = document.querySelectorAll('.hero__slide');
 const dots = document.querySelectorAll('.hero__dot');

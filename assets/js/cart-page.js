@@ -20,7 +20,7 @@ function renderCartPage() {
         <p class="cart-empty__text">
           Looks like you haven't added anything yet.
         </p>
-        <a href="shop.html" class="btn-gold">Start Shopping</a>
+        <a href="/shop" class="btn-gold">Start Shopping</a>
       </div>
     `;
     return;
@@ -105,7 +105,7 @@ function renderCartPage() {
       <button class="btn-checkout" id="checkout-btn">
         Proceed to Checkout
       </button>
-      <a href="shop.html" class="btn-continue">
+      <a href="/shop" class="btn-continue">
         ← Continue Shopping
       </a>
       <p class="cart-summary__note">
@@ -191,7 +191,7 @@ async function proceedToCheckout() {
   const user = getUser();
   if (!user) {
     alert('Please log in to checkout.');
-    window.location.href = 'login.html';
+    window.location.href = '/login';
     return;
   }
 

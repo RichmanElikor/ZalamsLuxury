@@ -51,7 +51,7 @@ function addToCart(productId, quantity = 1) {
   if (!user) {
     // Redirect to login if not logged in
     alert('Please log in to add items to your cart.');
-    window.location.href = 'login.html';
+    window.location.href = '/login';
     return;
   }
 
@@ -83,7 +83,7 @@ function addToCartWithOptions(productId, quantity = 1,
   );
   if (!user) {
     alert('Please log in to add items to your cart.');
-    window.location.href = 'login.html';
+    window.location.href = '/login';
     return;
   }
 

@@ -207,7 +207,7 @@ function addToCartWithSize(productId, size) {
   const user = JSON.parse(localStorage.getItem('zalams-user') || 'null');
   if (!user) {
     alert('Please log in to add items to your cart.');
-    window.location.href = 'login.html';
+    window.location.href = '/login';
     return false;
   }
 
@@ -321,7 +321,7 @@ function initShopPage() {
       urlCategory = null;
       activeFilter = tab.dataset.filter;
       setActive(activeFilter);
-      history.replaceState(null, '', 'shop.html');
+      history.replaceState(null, '', '/shop');
       display(activeFilter);
     });
   });
@@ -346,7 +346,7 @@ function initProductPage() {
           font-family:var(--font-heading);letter-spacing:0.1em">
           PRODUCT NOT FOUND
         </p>
-        <a href="shop.html"
+        <a href="/shop"
           style="color:var(--color-gold);margin-top:16px;display:inline-block">
           ← Back to Shop
         </a>

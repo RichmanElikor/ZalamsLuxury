@@ -48,6 +48,31 @@ app.use(express.urlencoded({ extended: true }));
 // --- Serve Frontend ---
 app.use(express.static(path.join(__dirname, '..')));
 
+// --- Page Routes (clean URLs) ---
+const pages = [
+  { route: '/',                file: 'index.html' },
+  { route: '/shop',            file: 'shop.html' },
+  { route: '/product',         file: 'product.html' },
+  { route: '/cart',            file: 'cart.html' },
+  { route: '/about',           file: 'about.html' },
+  { route: '/contact',         file: 'contact.html' },
+  { route: '/faq',             file: 'faq.html' },
+  { route: '/login',           file: 'login.html' },
+  { route: '/signup',          file: 'signup.html' },
+  { route: '/account',         file: 'account.html' },
+  { route: '/admin',           file: 'admin.html' },
+  { route: '/success',         file: 'success.html' },
+  { route: '/forgot-password', file: 'forgot-password.html' },
+  { route: '/reset-password',  file: 'reset-password.html' },
+  { route: '/admin-order',     file: 'admin-order.html' }
+];
+
+pages.forEach(({ route, file }) => {
+  app.get(route, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', file));
+  });
+});
+
 // --- API Routes ---
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
@@ -70,7 +95,7 @@ app.get('/api/health', (req, res) => {
 
 // --- Fallback: serve index.html ---
 app.get('/{*path}', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'index.html'));
+  res.sendFile(path.join(__dirname, '..', '/'));
 });
 
 // --- Start Server ---

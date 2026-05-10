@@ -11,7 +11,7 @@ const adminUser = JSON.parse(localStorage.getItem('zalams-user') || '{}');
 
 // --- Redirect if not admin ---
 if (!adminToken || !adminUser || adminUser.role !== 'admin') {
-  window.location.href = 'login.html';
+  window.location.href = '/login';
 }
 
 // --- Set admin name ---

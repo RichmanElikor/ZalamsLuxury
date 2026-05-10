@@ -25,9 +25,15 @@
   height: 100%;
   opacity: 0;
   transition: opacity 1.2s ease;
+  background-color: #1a1a1a; /* placeholder while image loads */
 }
 
 .hero__slide.active {
+  opacity: 1;
+}
+
+/* First slide shows immediately */
+.hero__slide:first-child {
   opacity: 1;
 }
 

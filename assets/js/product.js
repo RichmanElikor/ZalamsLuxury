@@ -100,6 +100,6 @@ if (buyNowBtn) {
 
     const productId = new URLSearchParams(window.location.search).get('id');
     addToCart(productId, quantity);
-    window.location.href = 'cart.html';
+    window.location.href = '/cart';
   });
 }

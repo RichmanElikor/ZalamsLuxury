@@ -7,11 +7,11 @@ const user = getUser();
 const token = getToken();
 
 if (!user || !token) {
-  window.location.href = 'login.html';
+  window.location.href = '/login';
 }
 
 if (user && user.role === 'admin') {
-  window.location.href = 'admin.html';
+  window.location.href = '/admin';
 }
 
 if (user) {
@@ -114,7 +114,7 @@ async function loadOrders() {
     const data = await response.json();
 
     if (!data.success || data.orders.length === 0) {
-      ordersList.innerHTML = '<div class="orders-empty"><h2 class="orders-empty__title">No Orders Yet</h2><p class="orders-empty__text">You haven\'t placed any orders yet.</p><a href="shop.html" class="btn-gold">Start Shopping</a></div>';
+      ordersList.innerHTML = '<div class="orders-empty"><h2 class="orders-empty__title">No Orders Yet</h2><p class="orders-empty__text">You haven\'t placed any orders yet.</p><a href="/shop" class="btn-gold">Start Shopping</a></div>';
       return;
     }
 
