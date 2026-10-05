@@ -182,7 +182,7 @@ if (searchLink) {
       }
 
       results.innerHTML = matches.map(p => `
-        <a href="product.html?id=${p.id}"
+        <a href="/product?id=${p.id}"
           style="display:flex;gap:16px;align-items:center;
           padding:12px 0;border-bottom:1px solid #e8e8e4;
           text-decoration:none;color:#111;

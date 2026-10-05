@@ -43,7 +43,7 @@ function renderCartPage() {
               <div class="cart-item__details">
                 <p class="cart-item__name"
                   style="cursor:pointer;text-decoration:underline;"
-                  onclick="window.location.href='product.html?id=${item.id}'">
+                  onclick="window.location.href='/product?id=${item.id}'">
                   ${item.name}
                 </p>
                 <p class="cart-item__meta">

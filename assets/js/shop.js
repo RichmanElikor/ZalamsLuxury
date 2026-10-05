@@ -86,7 +86,7 @@ function createProductCard(product) {
         </div>
       </div>
       <div class="product-card__info">
-        <a href="product.html?id=${product.id}">
+        <a href="/product?id=${product.id}">
           <p class="product-card__name">${product.name}</p>
         </a>
         <p class="product-card__price">${formatPrice(product.price)}</p>
@@ -137,7 +137,7 @@ function createShopCard(product) {
         <p class="shop-card__price">${formatPrice(product.price)}</p>
       </div>
       <div class="shop-card__btn-wrap">
-        <a href="product.html?id=${product.id}"
+        <a href="/product?id=${product.id}"
           class="shop-card__btn">
           Select Options
         </a>
