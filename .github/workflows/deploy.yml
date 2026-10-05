@@ -1,34 +1,32 @@
-name: Deploy Zalam's Luxury 
+name: Deploy Zalam's Luxury
 
-on: 
+on:
   push:
-    braches: [main]
+    branches: [main]
 
-jobs: 
+jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       # 1. Pulls the repo's code onto the temporary GitHub runner
-      # "uses" prebuilt action instead or writing raw commands 
-      name: checkout code 
-      uses: actions/checkout@v4
+      # "uses" a prebuilt action instead of writing raw commands
+      - name: Checkout code
+        uses: actions/checkout@v4
 
- # 2. Deploy to EC2 instance 
- # The actual development 
-      name: Deploy to EC2
-      uses: appleboy/ssh-action@v1.0.3
-      # 'with' passes configuration INTO the action - like 
-      # arguments 
-      with: 
-        host: ${{ secrets.EC2_HOST }}      # your instance's Elastic IP
-        username: ${{ secrets.EC2_USER }}   # "ubuntu"
-        key: ${{ secrets.EC2_SSH_KEY }}      # your private SSH key
+      # 2. Deploy to EC2 instance — the actual deployment
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        # "with" passes configuration INTO the action — like
+        # arguments to a function
+        with:
+          host: ${{ secrets.EC2_HOST }}       # your instance's Elastic IP
+          username: ${{ secrets.EC2_USER }}   # "ubuntu"
+          key: ${{ secrets.EC2_SSH_KEY }}     # your private SSH key
 
-        # "Script" - the actual list of commands this action will 
-        # run over SSH, They'll execute on Your EC2 instance. 
-
-        script: |
-          cd ~/ZalamsLuxury
-          git pull origin main 
-          npm install 
-          pm2 restart 
+          # "script" is the actual list of commands this action will
+          # run over SSH — they execute on your EC2 instance
+          script: |
+            cd ~/ZalamsLuxury
+            git pull origin main
+            npm install
+            pm2 restart zalams-luxury
